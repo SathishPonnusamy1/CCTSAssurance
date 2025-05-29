@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Project Manager</title>
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8f0;
+            color: #2d4d2d;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Screen Styles - Hidden by default */
+        .screen {
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 80, 0, 0.1);
+            padding: 30px;
+            margin-top: 20px;
+            border: 1px solid #c8e6c8;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #2e7d32;
+            color: white;
+            padding: 25px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.2em;
+        }
+        
+        /* Navigation Styles */
+        nav {
+            background-color: #388e3c;
+            padding: 12px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        nav li {
+            margin: 0 15px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        nav a:hover {
+            background-color: #43a047;
+            transform: translateY(-2px);
+        }
+        
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            background-color: #4caf50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:hover {
+            background-color: #388e3c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-secondary {
+            background-color: #81c784;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #66bb6a;
+        }
+        
+        .btn-option {
+            width: 220px;
+            text-align: center;
+            margin: 15px;
+            padding: 15px;
+            font-size: 18px;
+        }
+        
+        .btn-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2e7d32;
+        }
+        
+        input[type="text"],
+        input[type="password"],
+        input[type="url"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #a5d6a7;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="url"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #4caf50;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+        
+        .radio-group {
+            margin-top: 10px;
+            display: flex;
+            gap: 20px;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .radio-option input {
+            margin-right: 8px;
+        }
+        
+        /* Dashboard Styles */
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            flex: 1;
+            min-width: 200px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 80, 0, 0.08);
+            border-left: 4px solid #4caf50;
+        }
+        
+        .stat-card h3 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        
+        .stat-card p {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0 0;
+            color: #1b5e20;
+        }
+        
+        .recent-projects {
+            margin-top: 30px;
+        }
+        
+        /* Project List Styles */
+        .project-list {
+            list-style-type: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .project-item {
+            background-color: white;
+            border: 1px solid #c8e6c8;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .project-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 80, 0, 0.1);
+        }
+        
+        .project-item h3 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .project-type {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .type-internal {
+            background-color: #c8e6c9;
+            color: #1b5e20;
+        }
+        
+        .type-external {
+            background-color: #b3e5fc;
+            color: #01579b;
+        }
+        
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            color: #5a735a;
+            font-size: 14px;
+            border-top: 1px solid #c8e6c8;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav li {
+                margin: 5px 0;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-option {
+                width: 80%;
+            }
+            
+            .project-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Green Project Manager</h1>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#" onclick="showScreen('dashboard')">Dashboard</a></li>
+                <li><a href="#" onclick="showScreen('projects')">Projects</a></li>
+                <li><a href="#" onclick="showScreen('new-project')">New Project</a></li>
+                <li><a href="#" onclick="showScreen('update-projects')">Update</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <!-- Screen 1: Dashboard -->
+        <div id="dashboard" class="screen active">
+            <h2>Project Dashboard</h2>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3>Total Projects</h3>
+                    <p id="total-projects">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Internal Projects</h3>
+                    <p id="internal-projects">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>External Projects</h3>
+                    <p id="external-projects">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Users</h3>
+                    <p id="active-users">0</p>
+                </div>
+            </div>
+            
+            <div class="recent-projects">
+                <h3>Recent Projects</h3>
+                <ul class="project-list" id="recent-projects-list">
+                    <!-- Recent projects will be added here dynamically -->
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Screen 2: Projects -->
+        <div id="projects" class="screen">
+            <h2>Project Management</h2>
+            <p>Select an option below to manage your projects:</p>
+            
+            <div class="btn-container">
+                <a href="#" class="btn btn-option" onclick="showScreen('new-project')">
+                    <i class="icon">➕</i><br>
+                    New Project
+                </a>
+                <a href="#" class="btn btn-option btn-secondary" onclick="showExistingProjects()">
+                    <i class="icon">📂</i><br>
+                    Existing Projects
+                </a>
+                <a href="#" class="btn btn-option" onclick="showScreen('update-projects')">
+                    <i class="icon">✏️</i><br>
+                    Update Projects
+                </a>
+            </div>
+        </div>
+        
+        <!-- Screen 3: New Project -->
+        <div id="new-project" class="screen">
+            <h2>Create New Project</h2>
+            <form id="project-form">
+                <div class="form-group">
+                    <label for="project-name">Project Name:</label>
+                    <input type="text" id="project-name" required placeholder="Enter project name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-id">User ID:</label>
+                    <input type="text" id="user-id" required placeholder="Enter user ID">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" required placeholder="Enter password">
+                </div>
+                
+                <div class="form-group">
+                    <label for="project-link">Project Link:</label>
+                    <input type="url" id="project-link" required placeholder="https://example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label>Project Type:</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="project-type" value="internal" checked> Internal Project
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="project-type" value="external"> External Project
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn">Create Project</button>
+                <button type="button" class="btn btn-secondary" onclick="showScreen('projects')">Cancel</button>
+            </form>
+        </div>
+        
+        <!-- Screen 4: Update Projects -->
+        <div id="update-projects" class="screen">
+            <h2>Update Projects</h2>
+            <p>Select a project to update or delete:</p>
+            
+            <div class="form-group">
+                <label for="select-project">Project:</label>
+                <select id="select-project" class="form-control">
+                    <option value="">-- Select a project --</option>
+                    <!-- Projects will be added here dynamically -->
+                </select>
+            </div>
+            
+            <div id="update-form-container" style="display: none;">
+                <div class="form-group">
+                    <label for="update-project-name">Project Name:</label>
+                    <input type="text" id="update-project-name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="update-user-id">User ID:</label>
+                    <input type="text" id="update-user-id">
+                </div>
+                
+                <div class="form-group">
+                    <label for="update-password">Password:</label>
+                    <input type="password" id="update-password">
+                </div>
+                
+                <div class="form-group">
+                    <label for="update-project-link">Project Link:</label>
+                    <input type="url" id="update-project-link">
+                </div>
+                
+                <div class="form-group">
+                    <label>Project Type:</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="update-project-type" value="internal"> Internal Project
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="update-project-type" value="external"> External Project
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn" onclick="updateProject()">Update Project</button>
+                <button type="button" class="btn btn-secondary" onclick="deleteProject()">Delete Project</button>
+            </div>
+            
+            <button class="btn" onclick="showScreen('projects')">Back to Projects</button>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Green Project Manager. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Store projects in an array
+        let projects = [];
+        
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load any saved projects from localStorage
+            const savedProjects = localStorage.getItem('projects');
+            if (savedProjects) {
+                projects = JSON.parse(savedProjects);
+                updateDashboard();
+                updateProjectSelect();
+            }
+            
+            // Set up form submission for new project
+            document.getElementById('project-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                createNewProject();
+            });
+            
+            // Set up project selection for update screen
+            document.getElementById('select-project').addEventListener('change', function() {
+                const projectId = this.value;
+                if (projectId) {
+                    loadProjectForUpdate(projectId);
+                    document.getElementById('update-form-container').style.display = 'block';
+                } else {
+                    document.getElementById('update-form-container').style.display = 'none';
+                }
+            });
+        });
+        
+        // Function to show a specific screen
+        function showScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Show the requested screen
+            document.getElementById(screenId).classList.add('active');
+            
+            // Update dashboard when showing it
+            if (screenId === 'dashboard') {
+                updateDashboard();
+            }
+            
+            // Update project select when showing update screen
+            if (screenId === 'update-projects') {
+                updateProjectSelect();
+            }
+        }
+        
+        // Function to show existing projects
+        function showExistingProjects() {
+            showScreen('dashboard');
+        }
+        
+        // Function to create a new project
+        function createNewProject() {
+            const projectName = document.getElementById('project-name').value;
+            const userId = document.getElementById('user-id').value;
+            const password = document.getElementById('password').value;
+            const projectLink = document.getElementById('project-link').value;
+            const projectType = document.querySelector('input[name="project-type"]:checked').value;
+            
+            const newProject = {
+                id: Date.now().toString(),
+                name: projectName,
+                userId: userId,
+                password: password,
+                link: projectLink,
+                type: projectType,
+                date: new Date().toLocaleDateString(),
+                lastUpdated: new Date().toISOString()
+            };
+            
+            projects.push(newProject);
+            saveProjects();
+            
+            // Clear the form
+            document.getElementById('project-form').reset();
+            
+            // Update dashboard and project select
+            updateDashboard();
+            updateProjectSelect();
+            
+            // Show success message
+            alert('Project created successfully!');
+            
+            // Go to dashboard screen
+            showScreen('dashboard');
+        }
+        
+        // Function to update dashboard statistics
+        function updateDashboard() {
+            // Update stats
+            document.getElementById('total-projects').textContent = projects.length;
+            document.getElementById('internal-projects').textContent = 
+                projects.filter(p => p.type === 'internal').length;
+            document.getElementById('external-projects').textContent = 
+                projects.filter(p => p.type === 'external').length;
+            document.getElementById('active-users').textContent = 
+                new Set(projects.map(p => p.userId)).size;
+            
+            // Update recent projects list
+            const recentProjectsList = document.getElementById('recent-projects-list');
+            recentProjectsList.innerHTML = '';
+            
+            if (projects.length === 0) {
+                recentProjectsList.innerHTML = '<li>No projects found.</li>';
+            } else {
+                // Sort by last updated (newest first)
+                const sortedProjects = [...projects].sort((a, b) => 
+                    new Date(b.lastUpdated) - new Date(a.lastUpdated));
+                
+                // Show up to 6 most recent projects
+                sortedProjects.slice(0, 6).forEach(project => {
+                    const li = document.createElement('li');
+                    li.className = 'project-item';
+                    li.innerHTML = `
+                        <h3>${project.name}</h3>
+                        <p>User: ${project.userId}</p>
+                        <div class="project-meta">
+                            <span class="project-type type-${project.type}">
+                                ${project.type.charAt(0).toUpperCase() + project.type.slice(1)}
+                            </span>
+                            <span>${project.date}</span>
+                        </div>
+                    `;
+                    recentProjectsList.appendChild(li);
+                });
+            }
+        }
+        
+        // Function to update project select dropdown
+        function updateProjectSelect() {
+            const selectProject = document.getElementById('select-project');
+            // Keep the current selection if there is one
+            const currentSelection = selectProject.value;
+            
+            selectProject.innerHTML = '<option value="">-- Select a project --</option>';
+            
+            projects.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project.id;
+                option.textContent = project.name;
+                selectProject.appendChild(option);
+            });
+            
+            // Restore selection if it still exists
+            if (currentSelection && projects.some(p => p.id === currentSelection)) {
+                selectProject.value = currentSelection;
+                loadProjectForUpdate(currentSelection);
+                document.getElementById('update-form-container').style.display = 'block';
+            } else {
+                document.getElementById('update-form-container').style.display = 'none';
+            }
+        }
+        
+        // Function to load project data for updating
+        function loadProjectForUpdate(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                document.getElementById('update-project-name').value = project.name;
+                document.getElementById('update-user-id').value = project.userId;
+                document.getElementById('update-password').value = project.password;
+                document.getElementById('update-project-link').value = project.link;
+                
+                // Set the radio button
+                const radio = document.querySelector(`input[name="update-project-type"][value="${project.type}"]`);
+                if (radio) {
+                    radio.checked = true;
+                }
+            }
+        }
+        
+        // Function to update a project
+        function updateProject() {
+            const projectId = document.getElementById('select-project').value;
+            if (!projectId) return;
+            
+            const projectIndex = projects.findIndex(p => p.id === projectId);
+            if (projectIndex === -1) return;
+            
+            projects[projectIndex].name = document.getElementById('update-project-name').value;
+            projects[projectIndex].userId = document.getElementById('update-user-id').value;
+            projects[projectIndex].password = document.getElementById('update-password').value;
+            projects[projectIndex].link = document.getElementById('update-project-link').value;
+            projects[projectIndex].type = document.querySelector('input[name="update-project-type"]:checked').value;
+            projects[projectIndex].lastUpdated = new Date().toISOString();
+            
+            saveProjects();
+            updateDashboard();
+            updateProjectSelect();
+            
+            alert('Project updated successfully!');
+        }
+        
+        // Function to delete a project
+        function deleteProject() {
+            const projectId = document.getElementById('select-project').value;
+            if (!projectId) return;
+            
+            if (confirm('Are you sure you want to delete this project?')) {
+                projects = projects.filter(p => p.id !== projectId);
+                saveProjects();
+                updateDashboard();
+                updateProjectSelect();
+                
+                alert('Project deleted successfully!');
+                document.getElementById('update-form-container').style.display = 'none';
+                document.getElementById('select-project').value = '';
+            }
+        }
+        
+        // Function to save projects to localStorage
+        function saveProjects() {
+            localStorage.setItem('projects', JSON.stringify(projects));
+        }
+    </script>
+</body>
+</html>
