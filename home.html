@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green Project Manager</title>
+    <title>CCTS QA Assurance Dashboard</title>
     <style>
         /* Global Styles */
         * {
@@ -308,7 +308,7 @@
 <body>
     <header>
         <div class="container">
-            <h1>Green Project Manager</h1>
+            <h1>CCTS QA Assurance Dashboard</h1>
         </div>
     </header>
     
@@ -326,7 +326,7 @@
     <div class="container">
         <!-- Screen 1: Dashboard -->
         <div id="dashboard" class="screen active">
-            <h2>Project Dashboard</h2>
+            <h2>Centralised QA Dashboard</h2>
             
             <div class="stats-container">
                 <div class="stat-card">
@@ -334,15 +334,15 @@
                     <p id="total-projects">0</p>
                 </div>
                 <div class="stat-card">
-                    <h3>Internal Projects</h3>
+                    <h3>Projects in RED</h3>
                     <p id="internal-projects">0</p>
                 </div>
                 <div class="stat-card">
-                    <h3>External Projects</h3>
+                    <h3>Projects in AMBER</h3>
                     <p id="external-projects">0</p>
                 </div>
                 <div class="stat-card">
-                    <h3>Active Users</h3>
+                    <h3>Projects in GREEN</h3>
                     <p id="active-users">0</p>
                 </div>
             </div>
@@ -357,13 +357,13 @@
         
         <!-- Screen 2: Projects -->
         <div id="projects" class="screen">
-            <h2>Project Management</h2>
-            <p>Select an option below to manage your projects:</p>
+            <h2>CCTS Quality Assurance Management</h2>
+            <p>Select an option below to perform assurance for your projects:</p>
             
             <div class="btn-container">
                 <a href="#" class="btn btn-option" onclick="showScreen('new-project')">
                     <i class="icon">➕</i><br>
-                    New Project
+                    Onboard New Project
                 </a>
                 <a href="#" class="btn btn-option btn-secondary" onclick="showExistingProjects()">
                     <i class="icon">📂</i><br>
@@ -386,12 +386,12 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="user-id">User ID:</label>
+                    <label for="user-id">ADO User ID:</label>
                     <input type="text" id="user-id" required placeholder="Enter user ID">
                 </div>
                 
                 <div class="form-group">
-                    <label for="password">Password:</label>
+                    <label for="password">ADO PAT:</label>
                     <input type="password" id="password" required placeholder="Enter password">
                 </div>
                 
@@ -401,14 +401,42 @@
                 </div>
                 
                 <div class="form-group">
-                    <label>Project Type:</label>
+                    <label>Code Coverage:</label>
                     <div class="radio-group">
                         <label class="radio-option">
-                            <input type="radio" name="project-type" value="internal" checked> Internal Project
+                            <input type="radio" name="project-type" value="internal" checked> SonarCloud
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="project-type" value="external"> External Project
+                            <input type="radio" name="project-type" value="external"> SonarQube
                         </label>
+                        <label for="project-link">Sonar Link:</label>
+                    <input type="url" id="project-link" required placeholder="https://example.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>InSprint Testing:</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="project-type" value="internal" checked> ADO
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="project-type" value="external"> JIRA
+                        </label>
+                        <label for="project-link">InSprint Link:</label>
+                    <input type="url" id="project-link" required placeholder="https://example.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Sprint Regression Automated Test Pipeline:</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="project-type" value="internal" checked> ADO
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="project-type" value="external"> Jenkins
+                        </label>
+                        <label for="project-link">Sprint Regression Test Pipeline Link:</label>
+                    <input type="url" id="project-link" required placeholder="https://example.com">
                     </div>
                 </div>
                 
