@@ -5,7 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CCTS QA Assurance Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Restructured Navigation Styles */
+        nav {
+            background: linear-gradient(to right, #388e3c, #43a047);
+            padding: 10px 0;
+            box-shadow: 0 4px 12px rgba(0, 80, 0, 0.15);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .main-menu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        
+        .menu-item {
+            position: relative;
+            margin: 0 10px;
+        }
+        
+        .menu-item > a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-item > a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .menu-item > a i {
+            margin-right: 8px;
+            font-size: 1.1em;
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            min-width: 220px;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-menu a {
+            color: #2e7d32;
+            padding: 12px 20px;
+            display: block;
+            text-decoration: none;
+            transition: all 0.2s;
+            border-bottom: 1px solid #e0f0e0;
+        }
+        
+        .dropdown-menu a:hover {
+            background-color: #f0f8f0;
+            padding-left: 25px;
+        }
+        
+        .dropdown-menu a i {
+            margin-right: 10px;
+            color: #4caf50;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
         /* Global Styles */
         * {
             box-sizing: border-box;
@@ -37,6 +141,50 @@
     box-shadow: 0 4px 12px rgba(0, 80, 0, 0.1);
     animation: fadeIn 0.5s ease-out;
 }
+
+ /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .main-menu {
+                flex-direction: column;
+                width: 100%;
+                display: none;
+            }
+            
+            .main-menu.active {
+                display: block;
+            }
+            
+            .menu-item {
+                margin: 5px 0;
+                width: 100%;
+            }
+            
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                display: none;
+                box-shadow: none;
+                border-radius: 0;
+                border-left: 4px solid #4caf50;
+            }
+            
+            .menu-item:hover .dropdown-menu {
+                transform: none;
+            }
+            
+            .menu-toggle {
+                display: block;
+                align-self: flex-end;
+                margin-top: -45px;
+            }
+        }
 
 .status-filter-btn {
     cursor: pointer;
@@ -614,12 +762,58 @@
     </header>
     
     <nav>
-        <div class="container">
-            <ul>
-                <li><a href="#" onclick="showScreen('dashboard')">Dashboard</a></li>
-                <li><a href="#" onclick="showScreen('projects')">Projects</a></li>
-                <li><a href="#" onclick="showScreen('new-project')">New Project</a></li>
-                <li><a href="#" onclick="showScreen('update-projects')">Update</a></li>
+        <div class="nav-container">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="main-menu" id="mainMenu">
+                <li class="menu-item">
+                    <a href="#" onclick="showScreen('dashboard')">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>
+                
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-project-diagram"></i> Projects
+                        <i class="fas fa-chevron-down" style="margin-left: 8px; font-size: 0.8em;"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" onclick="showScreen('projects')">
+                            <i class="fas fa-list"></i> View All Projects
+                        </a>
+                        <a href="#" onclick="showScreen('new-project')">
+                            <i class="fas fa-plus-circle"></i> Create New Project
+                        </a>
+                        <a href="#" onclick="showScreen('update-projects')">
+                            <i class="fas fa-edit"></i> Update Projects
+                        </a>
+                    </div>
+                </li>
+                
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-chart-line"></i> Reports
+                        <i class="fas fa-chevron-down" style="margin-left: 8px; font-size: 0.8em;"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" onclick="showScreen('coverage-reports')">
+                            <i class="fas fa-code"></i> Code Coverage
+                        </a>
+                        <a href="#" onclick="showScreen('test-reports')">
+                            <i class="fas fa-vial"></i> Test Results
+                        </a>
+                        <a href="#" onclick="showScreen('security-reports')">
+                            <i class="fas fa-shield-alt"></i> Security
+                        </a>
+                    </div>
+                </li>
+                
+                <li class="menu-item">
+                    <a href="#" onclick="showScreen('settings')">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -980,6 +1174,36 @@
     </footer>
     
         <script>
+
+ // Mobile menu toggle functionality
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const menu = document.getElementById('mainMenu');
+            menu.classList.toggle('active');
+            
+            // Toggle icon between bars and times
+            const icon = this.querySelector('i');
+            if (menu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // Initialize dropdown menus for mobile
+        document.querySelectorAll('.menu-item > a').forEach(menuItem => {
+            if (window.innerWidth <= 992) {
+                menuItem.addEventListener('click', function(e) {
+                    if (this.parentElement.querySelector('.dropdown-menu')) {
+                        e.preventDefault();
+                        const dropdown = this.parentElement.querySelector('.dropdown-menu');
+                        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                    }
+                });
+            }
+        });
+
         // Store projects in an array
         let projects = [];
 
