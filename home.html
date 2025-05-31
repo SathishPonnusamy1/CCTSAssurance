@@ -23,6 +23,16 @@
             margin: 0 auto;
             padding: 20px;
         }
+
+        .fancy-frame {
+    border: 2px dashed #66bb6a;
+    background-color: #f9fff9;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 10px;
+    box-shadow: 0 4px 12px rgba(0, 80, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+                    }
         
         /* Screen Styles - Hidden by default */
         .screen {
@@ -402,7 +412,7 @@
                 
                 <div class="form-group">
                     <label><input type="checkbox" id="code-coverage-checkbox" onchange="toggleSection('code-coverage-section')"> Code Coverage</label>
-                    <div id="code-coverage-section" style="display:none; margin-top:10px;">
+                    <div id="code-coverage-section" class="fancy-frame" style="display:none; margin-top:10px;">
                     <div class="radio-group">
                     <label class="radio-option">
                     <input type="radio" name="code-coverage" value="SonarCloud"> Sonar Cloud
@@ -601,6 +611,7 @@
         section.style.display = 'none';
     }
                                         }
+                                        
         
         // Function to show a specific screen
         function showScreen(screenId) {
