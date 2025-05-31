@@ -27,6 +27,26 @@
             padding: 20px;
         }
 
+        /* Add to your CSS */
+#filtered-projects-container {
+    background-color: #f9fff9;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid #c8e6c8;
+    box-shadow: 0 4px 12px rgba(0, 80, 0, 0.1);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.status-filter-btn {
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.status-filter-btn:hover {
+    transform: translateY(-2px);
+}
+
         /* Fancy Frame with Leaf Accent */
         .fancy-frame {
             border: 2px solid #66bb6a;
@@ -634,6 +654,15 @@
                     <!-- Recent projects will be added here dynamically -->
                 </ul>
             </div>
+
+            <!-- Add this below the stats-container div -->
+            <div id="filtered-projects-container" style="display: none;">
+            <h3 id="filtered-projects-title"></h3>
+            <ul class="project-list" id="filtered-projects-list">
+            <!-- Filtered projects will be added here dynamically -->
+            </ul>
+            </div>
+
         </div>
         
         <!-- Screen 2: Projects -->
@@ -953,6 +982,89 @@
         <script>
         // Store projects in an array
         let projects = [];
+
+        // Add this JavaScript to make the status cards clickable and show filtered projects
+function setupStatusFilters() {
+    // Get all stat cards
+    const statCards = document.querySelectorAll('.stat-card');
+    
+    statCards.forEach(card => {
+        // Make cards clickable
+        card.style.cursor = 'pointer';
+        card.classList.add('status-filter-btn');
+        
+        // Add click event listeners
+        card.addEventListener('click', function() {
+            const title = this.querySelector('h3').textContent;
+            let status = '';
+            
+            // Determine which status was clicked
+            if (title.includes('RED')) {
+                status = 'red';
+            } else if (title.includes('AMBER')) {
+                status = 'amber';
+            } else if (title.includes('GREEN')) {
+                status = 'green';
+            }
+            
+            // Show filtered projects if a status was determined
+            if (status) {
+                showFilteredProjects(status, title);
+            }
+        });
+    });
+}
+
+function showFilteredProjects(status, title) {
+    const container = document.getElementById('filtered-projects-container');
+    const titleElement = document.getElementById('filtered-projects-title');
+    const projectsList = document.getElementById('filtered-projects-list');
+    
+    // Filter projects by status
+    const filteredProjects = projects.filter(p => p.status === status);
+    
+    // Update the title
+    titleElement.textContent = `Projects in ${status.toUpperCase()}`;
+    
+    // Clear previous projects
+    projectsList.innerHTML = '';
+    
+    // Add filtered projects to the list
+    filteredProjects.forEach(project => {
+        const projectItem = document.createElement('li');
+        projectItem.className = 'project-item';
+        
+        let statusBadge = '';
+        if (project.status === 'red') {
+            statusBadge = '<span class="project-type type-internal">RED</span>';
+        } else if (project.status === 'amber') {
+            statusBadge = '<span class="project-type type-external">AMBER</span>';
+        } else {
+            statusBadge = '<span class="project-type type-internal">GREEN</span>';
+        }
+        
+        projectItem.innerHTML = `
+            <h3>${project.name}</h3>
+            <p>${project.description || 'No description available'}</p>
+            <div class="project-meta">
+                ${statusBadge}
+                <span>Added: ${new Date(project.dateAdded).toLocaleDateString()}</span>
+            </div>
+        `;
+        
+        projectsList.appendChild(projectItem);
+    });
+    
+    // Show the container
+    container.style.display = 'block';
+    
+    // Scroll to the filtered projects section
+    container.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Call this function in your initializeSampleData function
+// Add this line at the end of your initializeSampleData function:
+setupStatusFilters();
         
         // Function to show a specific screen and hide others
         function showScreen(screenId) {
@@ -1166,41 +1278,46 @@
             updateForm.style.display = 'block';
         });
         
-        // Initialize with some sample data
-        function initializeSampleData() {
-            projects = [
-                {
-                    name: 'DEFRA Plants',
-                    userId: 'plants.user',
-                    password: 'encrypted123',
-                    link: 'https://dev.azure.com/defragovuk/DEFRA%20Plants',
-                    dateAdded: '2025-01-15',
-                    status: 'green'
-                },
-                {
-                    name: 'Rural Payments',
-                    userId: 'rpa.user',
-                    password: 'encrypted456',
-                    link: 'https://dev.azure.com/defragovuk/Rural%20Payments',
-                    dateAdded: '2025-02-20',
-                    status: 'amber'
-                },
-                {
-                    name: 'Flood Warning',
-                    userId: 'flood.user',
-                    password: 'encrypted789',
-                    link: 'https://dev.azure.com/defragovuk/Flood%20Warning',
-                    dateAdded: '2025-03-10',
-                    status: 'red'
-                }
-            ];
-            
-            // Update dashboard if it's active !
-            if (document.getElementById('dashboard').classList.contains('active')) {
-                updateDashboardStats();
-                loadRecentProjects();
-            }
+function initializeSampleData() {
+    projects = [
+        {
+            name: 'DEFRA Plants',
+            userId: 'plants.user',
+            password: 'encrypted123',
+            link: 'https://dev.azure.com/defragovuk/DEFRA%20Plants',
+            dateAdded: '2025-01-15',
+            status: 'green',
+            description: 'Plant health and certification system'
+        },
+        {
+            name: 'Rural Payments',
+            userId: 'rpa.user',
+            password: 'encrypted456',
+            link: 'https://dev.azure.com/defragovuk/Rural%20Payments',
+            dateAdded: '2025-02-20',
+            status: 'amber',
+            description: 'Agricultural payments system'
+        },
+        {
+            name: 'Flood Warning',
+            userId: 'flood.user',
+            password: 'encrypted789',
+            link: 'https://dev.azure.com/defragovuk/Flood%20Warning',
+            dateAdded: '2025-03-10',
+            status: 'red',
+            description: 'National flood monitoring and warning system'
         }
+    ];
+    
+    // Update dashboard if it's active
+    if (document.getElementById('dashboard').classList.contains('active')) {
+        updateDashboardStats();
+        loadRecentProjects();
+    }
+    
+    // Add this line to set up the status filters
+    setupStatusFilters();
+}
         
         // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
