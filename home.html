@@ -522,9 +522,10 @@
                     <input type="url" id="sec-link" placeholder="https://example.com">
                 </div>
                 </div>
-                <button type="submit" class="btn">Create Project</button>
+                <button id="submitBtn" type="submit" class="btn">Create Project</button>
                 <div class="loading" id="loading">Sending request, please wait...</div>
-                <script>
+                
+<script>
         document.getElementById('submitBtn').addEventListener('click', function() {
             const loadingElement = document.getElementById('loading');
             
@@ -613,6 +614,7 @@
             });
         });
     </script>
+
                 <button type="button" class="btn btn-secondary" onclick="showScreen('projects')">Cancel</button>
                 </div>
             </form>
