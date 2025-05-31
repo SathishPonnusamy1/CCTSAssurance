@@ -4,18 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CCTS QA Assurance Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* Global Styles */
         * {
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
             margin: 0;
             padding: 0;
             background-color: #f0f8f0;
-            color: #2d4d2d;
+            color: #1a3a1a;
+            background-image: linear-gradient(to bottom, #f0f8f0, #e0f0e0);
+            min-height: 100vh;
         }
         
         .container {
@@ -24,25 +27,47 @@
             padding: 20px;
         }
 
+        /* Fancy Frame with Leaf Accent */
         .fancy-frame {
-    border: 2px dashed #66bb6a;
-    background-color: #f9fff9;
-    border-radius: 12px;
-    padding: 15px;
-    margin-top: 10px;
-    box-shadow: 0 4px 12px rgba(0, 80, 0, 0.1);
-    transition: all 0.3s ease-in-out;
-                    }
+            border: 2px solid #66bb6a;
+            background-color: #f9fff9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(0, 80, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fancy-frame::before {
+            content: "";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2366bb6a" opacity="0.2"><path d="M17 8C8 10 5.9 16.8 3 22c5-3 10-5 14-7-3-2-5-5-5-7 0-3 3-6 5-6s5 3 5 6z"/></svg>');
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
         
         /* Screen Styles - Hidden by default */
         .screen {
             display: none;
             background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 80, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 100, 0, 0.15);
             padding: 30px;
-            margin-top: 20px;
+            margin-top: 25px;
             border: 1px solid #c8e6c8;
+            background-image: linear-gradient(to bottom right, #ffffff, #f5fff5);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .active {
@@ -51,23 +76,61 @@
         
         /* Header Styles */
         header {
-            background-color: #2e7d32;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
             color: white;
-            padding: 25px 0;
+            padding: 30px 0;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 100, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, transparent 20%);
+            pointer-events: none;
         }
         
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
         h1 {
             margin: 0;
-            font-size: 2.2em;
+            font-size: 2.5em;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            letter-spacing: 0.5px;
+        }
+
+        h2 {
+            color: #2e7d32;
+            border-bottom: 2px solid #c8e6c8;
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #388e3c;
+            font-size: 1.4em;
         }
         
         /* Navigation Styles */
         nav {
-            background-color: #388e3c;
-            padding: 12px 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to right, #388e3c, #43a047);
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 80, 0, 0.15);
+            position: relative;
+            z-index: 10;
         }
         
         nav ul {
@@ -81,58 +144,125 @@
         
         nav li {
             margin: 0 15px;
+            position: relative;
         }
         
         nav a {
             color: white;
             text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 20px;
+            padding: 10px 20px;
+            border-radius: 25px;
             transition: all 0.3s;
             font-weight: 500;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        nav a::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
         }
         
         nav a:hover {
-            background-color: #43a047;
-            transform: translateY(-2px);
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        nav a:hover::before {
+            left: 100%;
         }
         
         /* Button Styles */
         .btn {
             display: inline-block;
-            background-color: #4caf50;
+            background: linear-gradient(to bottom, #4caf50, #43a047);
             color: white;
-            padding: 12px 25px;
+            padding: 12px 28px;
             border: none;
-            border-radius: 25px;
+            border-radius: 30px;
             cursor: pointer;
             text-decoration: none;
             font-size: 16px;
             margin: 10px 5px;
             transition: all 0.3s;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 100, 0, 0.2);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
         }
         
         .btn:hover {
-            background-color: #388e3c;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(to bottom, #43a047, #388e3c);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 100, 0, 0.25);
+        }
+        
+        .btn:active::after {
+            animation: ripple 0.6s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
         }
         
         .btn-secondary {
-            background-color: #81c784;
+            background: linear-gradient(to bottom, #81c784, #66bb6a);
         }
         
         .btn-secondary:hover {
-            background-color: #66bb6a;
+            background: linear-gradient(to bottom, #66bb6a, #4caf50);
         }
         
         .btn-option {
-            width: 220px;
+            width: 240px;
             text-align: center;
             margin: 15px;
-            padding: 15px;
+            padding: 20px;
             font-size: 18px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 100, 0, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-option:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 100, 0, 0.2);
+        }
+
+        .btn-option .icon {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 10px;
         }
         
         .btn-container {
@@ -145,13 +275,15 @@
         /* Form Styles */
         .form-group {
             margin-bottom: 25px;
+            position: relative;
         }
         
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 600;
             color: #2e7d32;
+            font-size: 15px;
         }
         
         input[type="text"],
@@ -160,11 +292,13 @@
         textarea,
         select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #a5d6a7;
-            border-radius: 6px;
+            padding: 14px 16px;
+            border: 2px solid #a5d6a7;
+            border-radius: 8px;
             font-size: 16px;
-            transition: border 0.3s;
+            transition: all 0.3s;
+            background-color: #f9fff9;
+            font-family: 'Poppins', sans-serif;
         }
         
         input[type="text"]:focus,
@@ -174,56 +308,94 @@
         select:focus {
             border-color: #4caf50;
             outline: none;
-            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+            background-color: white;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+            accent-color: #4caf50;
         }
         
         .radio-group {
-            margin-top: 10px;
+            margin-top: 15px;
             display: flex;
-            gap: 20px;
+            gap: 25px;
         }
         
         .radio-option {
             display: flex;
             align-items: center;
+            cursor: pointer;
         }
         
         .radio-option input {
-            margin-right: 8px;
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            accent-color: #4caf50;
+        }
+
+        .radio-option:hover {
+            color: #1b5e20;
         }
         
         /* Dashboard Styles */
         .stats-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 25px;
+            margin-bottom: 40px;
         }
         
         .stat-card {
             flex: 1;
             min-width: 200px;
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 80, 0, 0.08);
-            border-left: 4px solid #4caf50;
+            background: linear-gradient(135deg, #ffffff, #f5fff5);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 80, 0, 0.1);
+            border-left: 6px solid #4caf50;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 80, 0, 0.15);
+        }
+
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(76, 175, 80, 0.1);
+            border-bottom-left-radius: 100%;
         }
         
         .stat-card h3 {
             margin-top: 0;
             color: #2e7d32;
+            font-size: 1.1em;
+            margin-bottom: 15px;
         }
         
         .stat-card p {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: bold;
             margin: 10px 0 0;
             color: #1b5e20;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .recent-projects {
-            margin-top: 30px;
+            margin-top: 40px;
         }
         
         /* Project List Styles */
@@ -232,61 +404,147 @@
             padding: 0;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+            gap: 25px;
         }
         
         .project-item {
-            background-color: white;
+            background: linear-gradient(135deg, #ffffff, #f5fff5);
             border: 1px solid #c8e6c8;
-            border-radius: 8px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 25px;
             transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 80, 0, 0.08);
+            position: relative;
+        }
+
+        .project-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, #4caf50, #81c784);
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
         }
         
         .project-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0, 80, 0, 0.1);
+            box-shadow: 0 8px 20px rgba(0, 80, 0, 0.15);
         }
         
         .project-item h3 {
             margin-top: 0;
             color: #2e7d32;
+            font-size: 1.3em;
         }
         
         .project-meta {
             display: flex;
             justify-content: space-between;
-            margin-top: 15px;
+            margin-top: 20px;
             font-size: 14px;
-            color: #666;
+            color: #5a735a;
         }
         
         .project-type {
             display: inline-block;
-            padding: 3px 8px;
-            border-radius: 12px;
+            padding: 5px 12px;
+            border-radius: 15px;
             font-size: 12px;
             font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .type-internal {
-            background-color: #c8e6c9;
+            background-color: #e8f5e9;
             color: #1b5e20;
+            border: 1px solid #a5d6a7;
         }
         
         .type-external {
-            background-color: #b3e5fc;
-            color: #01579b;
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            border: 1px solid #90caf9;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            padding: 15px;
+            margin: 15px 0;
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            color: #2e7d32;
+            font-weight: 500;
+            text-align: center;
+            position: relative;
+        }
+
+        .loading::after {
+            content: "";
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(76, 175, 80, 0.3);
+            border-radius: 50%;
+            border-top-color: #4caf50;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
         /* Footer Styles */
         footer {
             text-align: center;
-            padding: 25px;
-            margin-top: 40px;
+            padding: 30px;
+            margin-top: 60px;
             color: #5a735a;
             font-size: 14px;
             border-top: 1px solid #c8e6c8;
+            background-color: #f5fff5;
+        }
+
+        /* Floating Leaves Decoration */
+        .leaf-decoration {
+            position: fixed;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .leaf-1 {
+            top: 10%;
+            left: 5%;
+            transform: rotate(20deg);
+            width: 100px;
+            height: 100px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232e7d32"><path d="M17 8C8 10 5.9 16.8 3 22c5-3 10-5 14-7-3-2-5-5-5-7 0-3 3-6 5-6s5 3 5 6z"/></svg>');
+            background-repeat: no-repeat;
+            background-size: contain;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .leaf-2 {
+            bottom: 15%;
+            right: 5%;
+            transform: rotate(-15deg);
+            width: 120px;
+            height: 120px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234caf50"><path d="M17 8C8 10 5.9 16.8 3 22c5-3 10-5 14-7-3-2-5-5-5-7 0-3 3-6 5-6s5 3 5 6z"/></svg>');
+            background-repeat: no-repeat;
+            background-size: contain;
+            animation: float 10s ease-in-out infinite 2s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(20deg); }
+            50% { transform: translateY(-20px) rotate(25deg); }
         }
         
         /* Responsive Adjustments */
@@ -297,7 +555,7 @@
             }
             
             nav li {
-                margin: 5px 0;
+                margin: 8px 0;
             }
             
             .btn-container {
@@ -306,16 +564,29 @@
             }
             
             .btn-option {
-                width: 80%;
+                width: 90%;
+                margin: 10px 0;
             }
             
             .project-list {
                 grid-template-columns: 1fr;
             }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .stat-card {
+                min-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Decorative elements -->
+    <div class="leaf-decoration leaf-1"></div>
+    <div class="leaf-decoration leaf-2"></div>
+
     <header>
         <div class="container">
             <h1>CCTS QA Assurance Dashboard</h1>
@@ -372,15 +643,15 @@
             
             <div class="btn-container">
                 <a href="#" class="btn btn-option" onclick="showScreen('new-project')">
-                    <i class="icon">➕</i><br>
+                    <span class="icon">➕</span><br>
                     Onboard New Project
                 </a>
                 <a href="#" class="btn btn-option btn-secondary" onclick="showExistingProjects()">
-                    <i class="icon">📂</i><br>
+                    <span class="icon">📂</span><br>
                     Existing Projects
                 </a>
                 <a href="#" class="btn btn-option" onclick="showScreen('update-projects')">
-                    <i class="icon">✏️</i><br>
+                    <span class="icon">✏️</span><br>
                     Update Projects
                 </a>
             </div>
@@ -679,236 +950,262 @@
         </div>
     </footer>
     
-    <script>
+        <script>
         // Store projects in an array
         let projects = [];
         
-        // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load any saved projects from localStorage
-            const savedProjects = localStorage.getItem('projects');
-            if (savedProjects) {
-                projects = JSON.parse(savedProjects);
-                updateDashboard();
-                updateProjectSelect();
-            }
-            
-            // Set up form submission for new project
-            document.getElementById('project-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                createNewProject();
-            });
-            
-            // Set up project selection for update screen
-            document.getElementById('select-project').addEventListener('change', function() {
-                const projectId = this.value;
-                if (projectId) {
-                    loadProjectForUpdate(projectId);
-                    document.getElementById('update-form-container').style.display = 'block';
-                } else {
-                    document.getElementById('update-form-container').style.display = 'none';
-                }
-            });
-        });
-
-        function toggleSection(sectionId) {
-    const section = document.getElementById(sectionId);
-    if (section.style.display === 'none' || section.style.display === '') {
-        section.style.display = 'block';
-    } else {
-        section.style.display = 'none';
-    }
-                                        }
-                                        
-        
-        // Function to show a specific screen
+        // Function to show a specific screen and hide others
         function showScreen(screenId) {
             // Hide all screens
-            document.querySelectorAll('.screen').forEach(screen => {
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => {
                 screen.classList.remove('active');
             });
             
-            // Show the requested screen
-            document.getElementById(screenId).classList.add('active');
+            // Show the selected screen
+            const activeScreen = document.getElementById(screenId);
+            if (activeScreen) {
+                activeScreen.classList.add('active');
+            }
             
-            // Update dashboard when showing it
+            // Update dashboard stats when showing dashboard
             if (screenId === 'dashboard') {
-                updateDashboard();
+                updateDashboardStats();
+                loadRecentProjects();
             }
             
-            // Update project select when showing update screen
+            // Load projects dropdown when showing update screen
             if (screenId === 'update-projects') {
-                updateProjectSelect();
+                loadProjectsDropdown();
             }
+        }
+        
+        // Function to toggle sections based on checkbox
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const checkbox = document.getElementById(sectionId.replace('-section', '-checkbox'));
+            
+            if (checkbox.checked) {
+                section.style.display = 'block';
+            } else {
+                section.style.display = 'none';
+            }
+        }
+        
+        // Function to update dashboard statistics
+        function updateDashboardStats() {
+            document.getElementById('total-projects').textContent = projects.length;
+            
+            const redProjects = projects.filter(p => p.status === 'red').length;
+            const amberProjects = projects.filter(p => p.status === 'amber').length;
+            const greenProjects = projects.filter(p => p.status === 'green').length;
+            
+            document.getElementById('internal-projects').textContent = redProjects;
+            document.getElementById('external-projects').textContent = amberProjects;
+            document.getElementById('active-users').textContent = greenProjects;
+        }
+        
+        // Function to load recent projects
+        function loadRecentProjects() {
+            const recentProjectsList = document.getElementById('recent-projects-list');
+            recentProjectsList.innerHTML = '';
+            
+            // Sort projects by date (newest first) and take first 4
+            const recentProjects = [...projects]
+                .sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))
+                .slice(0, 4);
+            
+            recentProjects.forEach(project => {
+                const projectItem = document.createElement('li');
+                projectItem.className = 'project-item';
+                
+                let statusBadge = '';
+                if (project.status === 'red') {
+                    statusBadge = '<span class="project-type type-internal">RED</span>';
+                } else if (project.status === 'amber') {
+                    statusBadge = '<span class="project-type type-external">AMBER</span>';
+                } else {
+                    statusBadge = '<span class="project-type type-internal">GREEN</span>';
+                }
+                
+                projectItem.innerHTML = `
+                    <h3>${project.name}</h3>
+                    <p>${project.description || 'No description available'}</p>
+                    <div class="project-meta">
+                        ${statusBadge}
+                        <span>Added: ${new Date(project.dateAdded).toLocaleDateString()}</span>
+                    </div>
+                `;
+                
+                recentProjectsList.appendChild(projectItem);
+            });
+        }
+        
+        // Function to load projects into the dropdown
+        function loadProjectsDropdown() {
+            const select = document.getElementById('select-project');
+            select.innerHTML = '<option value="">-- Select a project --</option>';
+            
+            projects.forEach((project, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = project.name;
+                select.appendChild(option);
+            });
         }
         
         // Function to show existing projects
         function showExistingProjects() {
-            showScreen('dashboard');
+            // In a real app, this would fetch and display projects
+            alert('This would show a list of existing projects in a real implementation.');
         }
         
-        // Function to create a new project
-        function createNewProject() {
+        // Function to handle form submission
+        document.getElementById('project-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
             const projectName = document.getElementById('project-name').value;
             const userId = document.getElementById('user-id').value;
             const password = document.getElementById('password').value;
             const projectLink = document.getElementById('project-link').value;
-            const projectType = document.querySelector('input[name="project-type"]:checked').value;
             
+            // Create new project object
             const newProject = {
-                id: Date.now().toString(),
                 name: projectName,
                 userId: userId,
                 password: password,
                 link: projectLink,
-                type: projectType,
-                date: new Date().toLocaleDateString(),
-                lastUpdated: new Date().toISOString()
+                dateAdded: new Date().toISOString(),
+                status: 'green' // Default status
             };
             
+            // Add to projects array
             projects.push(newProject);
-            saveProjects();
             
-            // Clear the form
-            document.getElementById('project-form').reset();
-            
-            // Update dashboard and project select
-            updateDashboard();
-            updateProjectSelect();
+            // Reset form
+            this.reset();
             
             // Show success message
             alert('Project created successfully!');
             
-            // Go to dashboard screen
-            showScreen('dashboard');
-        }
-        
-        // Function to update dashboard statistics
-        function updateDashboard() {
-            // Update stats
-            document.getElementById('total-projects').textContent = projects.length;
-            document.getElementById('internal-projects').textContent = 
-                projects.filter(p => p.type === 'internal').length;
-            document.getElementById('external-projects').textContent = 
-                projects.filter(p => p.type === 'external').length;
-            document.getElementById('active-users').textContent = 
-                new Set(projects.map(p => p.userId)).size;
-            
-            // Update recent projects list
-            const recentProjectsList = document.getElementById('recent-projects-list');
-            recentProjectsList.innerHTML = '';
-            
-            if (projects.length === 0) {
-                recentProjectsList.innerHTML = '<li>No projects found.</li>';
-            } else {
-                // Sort by last updated (newest first)
-                const sortedProjects = [...projects].sort((a, b) => 
-                    new Date(b.lastUpdated) - new Date(a.lastUpdated));
-                
-                // Show up to 6 most recent projects
-                sortedProjects.slice(0, 6).forEach(project => {
-                    const li = document.createElement('li');
-                    li.className = 'project-item';
-                    li.innerHTML = `
-                        <h3>${project.name}</h3>
-                        <p>User: ${project.userId}</p>
-                        <div class="project-meta">
-                            <span class="project-type type-${project.type}">
-                                ${project.type.charAt(0).toUpperCase() + project.type.slice(1)}
-                            </span>
-                            <span>${project.date}</span>
-                        </div>
-                    `;
-                    recentProjectsList.appendChild(li);
-                });
-            }
-        }
-        
-        // Function to update project select dropdown
-        function updateProjectSelect() {
-            const selectProject = document.getElementById('select-project');
-            // Keep the current selection if there is one
-            const currentSelection = selectProject.value;
-            
-            selectProject.innerHTML = '<option value="">-- Select a project --</option>';
-            
-            projects.forEach(project => {
-                const option = document.createElement('option');
-                option.value = project.id;
-                option.textContent = project.name;
-                selectProject.appendChild(option);
-            });
-            
-            // Restore selection if it still exists
-            if (currentSelection && projects.some(p => p.id === currentSelection)) {
-                selectProject.value = currentSelection;
-                loadProjectForUpdate(currentSelection);
-                document.getElementById('update-form-container').style.display = 'block';
-            } else {
-                document.getElementById('update-form-container').style.display = 'none';
-            }
-        }
-        
-        // Function to load project data for updating
-        function loadProjectForUpdate(projectId) {
-            const project = projects.find(p => p.id === projectId);
-            if (project) {
-                document.getElementById('update-project-name').value = project.name;
-                document.getElementById('update-user-id').value = project.userId;
-                document.getElementById('update-password').value = project.password;
-                document.getElementById('update-project-link').value = project.link;
-                
-                // Set the radio button
-                const radio = document.querySelector(`input[name="update-project-type"][value="${project.type}"]`);
-                if (radio) {
-                    radio.checked = true;
-                }
-            }
-        }
+            // Go back to projects screen
+            showScreen('projects');
+        });
         
         // Function to update a project
         function updateProject() {
-            const projectId = document.getElementById('select-project').value;
-            if (!projectId) return;
+            const select = document.getElementById('select-project');
+            const index = select.value;
             
-            const projectIndex = projects.findIndex(p => p.id === projectId);
-            if (projectIndex === -1) return;
+            if (index === '') {
+                alert('Please select a project first.');
+                return;
+            }
             
-            projects[projectIndex].name = document.getElementById('update-project-name').value;
-            projects[projectIndex].userId = document.getElementById('update-user-id').value;
-            projects[projectIndex].password = document.getElementById('update-password').value;
-            projects[projectIndex].link = document.getElementById('update-project-link').value;
-            projects[projectIndex].type = document.querySelector('input[name="update-project-type"]:checked').value;
-            projects[projectIndex].lastUpdated = new Date().toISOString();
+            const project = projects[index];
             
-            saveProjects();
-            updateDashboard();
-            updateProjectSelect();
+            // Update project details
+            project.name = document.getElementById('update-project-name').value;
+            project.userId = document.getElementById('update-user-id').value;
+            project.password = document.getElementById('update-password').value;
+            project.link = document.getElementById('update-project-link').value;
+            
+            const typeRadios = document.getElementsByName('update-project-type');
+            for (const radio of typeRadios) {
+                if (radio.checked) {
+                    project.type = radio.value;
+                    break;
+                }
+            }
             
             alert('Project updated successfully!');
+            loadProjectsDropdown();
         }
         
         // Function to delete a project
         function deleteProject() {
-            const projectId = document.getElementById('select-project').value;
-            if (!projectId) return;
+            const select = document.getElementById('select-project');
+            const index = select.value;
+            
+            if (index === '') {
+                alert('Please select a project first.');
+                return;
+            }
             
             if (confirm('Are you sure you want to delete this project?')) {
-                projects = projects.filter(p => p.id !== projectId);
-                saveProjects();
-                updateDashboard();
-                updateProjectSelect();
-                
-                alert('Project deleted successfully!!');
+                projects.splice(index, 1);
+                alert('Project deleted successfully!');
                 document.getElementById('update-form-container').style.display = 'none';
-                document.getElementById('select-project').value = '';
+                loadProjectsDropdown();
             }
         }
         
-        // Function to save projects to localStorage
-        function saveProjects() {
-            localStorage.setItem('projects', JSON.stringify(projects));
+        // Event listener for project selection in update screen
+        document.getElementById('select-project').addEventListener('change', function() {
+            const index = this.value;
+            const updateForm = document.getElementById('update-form-container');
+            
+            if (index === '') {
+                updateForm.style.display = 'none';
+                return;
+            }
+            
+            const project = projects[index];
+            
+            // Fill the form with project details
+            document.getElementById('update-project-name').value = project.name;
+            document.getElementById('update-user-id').value = project.userId;
+            document.getElementById('update-password').value = project.password;
+            document.getElementById('update-project-link').value = project.link;
+            
+            const typeRadios = document.getElementsByName('update-project-type');
+            for (const radio of typeRadios) {
+                radio.checked = (radio.value === project.type);
+            }
+            
+            updateForm.style.display = 'block';
+        });
+        
+        // Initialize with some sample data
+        function initializeSampleData() {
+            projects = [
+                {
+                    name: 'DEFRA Plants',
+                    userId: 'plants.user',
+                    password: 'encrypted123',
+                    link: 'https://dev.azure.com/defragovuk/DEFRA%20Plants',
+                    dateAdded: '2025-01-15',
+                    status: 'green'
+                },
+                {
+                    name: 'Rural Payments',
+                    userId: 'rpa.user',
+                    password: 'encrypted456',
+                    link: 'https://dev.azure.com/defragovuk/Rural%20Payments',
+                    dateAdded: '2025-02-20',
+                    status: 'amber'
+                },
+                {
+                    name: 'Flood Warning',
+                    userId: 'flood.user',
+                    password: 'encrypted789',
+                    link: 'https://dev.azure.com/defragovuk/Flood%20Warning',
+                    dateAdded: '2025-03-10',
+                    status: 'red'
+                }
+            ];
+            
+            // Update dashboard if it's active
+            if (document.getElementById('dashboard').classList.contains('active')) {
+                updateDashboardStats();
+                loadRecentProjects();
+            }
         }
+        
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSampleData();
+        });
     </script>
 </body>
 </html>
