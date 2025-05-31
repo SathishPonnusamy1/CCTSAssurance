@@ -401,17 +401,19 @@
                 </div>
                 
                 <div class="form-group">
-                    <label>Code Coverage:</label>
+                    <label><input type="checkbox" id="code-coverage-checkbox" onchange="toggleSection('code-coverage-section')"> Code Coverage</label>
+                    <div id="code-coverage-section" style="display:none; margin-top:10px;">
                     <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="project-type" value="internal" checked> SonarCloud
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="project-type" value="external"> SonarQube
-                        </label>
-                        <label for="project-link">Sonar Link:</label>
-                    <input type="url" id="project-link" required placeholder="https://example.com">
-                    </div>
+                    <label class="radio-option">
+                    <input type="radio" name="code-coverage" value="SonarCloud"> Sonar Cloud
+                    </label>
+                    <label class="radio-option">
+                    <input type="radio" name="code-coverage" value="SonarQube"> Sonar Qube
+                    </label>
+                </div>
+                    <label for="sonar-link">Sonar Link:</label>
+                    <input type="url" id="sonar-link" placeholder="https://example.com">
+                </div>
                 </div>
                 <div class="form-group">
                     <label>InSprint Testing:</label>
@@ -590,6 +592,15 @@
                 }
             });
         });
+
+        function toggleSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section.style.display === 'none' || section.style.display === '') {
+        section.style.display = 'block';
+    } else {
+        section.style.display = 'none';
+    }
+                                        }
         
         // Function to show a specific screen
         function showScreen(screenId) {
