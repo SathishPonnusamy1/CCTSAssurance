@@ -523,6 +523,96 @@
                 </div>
                 </div>
                 <button type="submit" class="btn">Create Project</button>
+                <div class="loading" id="loading">Sending request, please wait...</div>
+                <script>
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            const loadingElement = document.getElementById('loading');
+            
+            // Show loading message
+            loadingElement.style.display = 'block';
+            
+            // API endpoint and data
+            const url = 'https://dev.azure.com/defragovuk/CCTS Quality Assurance and Test/_apis/dashboard/dashboards?api-version=7.1-preview.3';
+            
+            const data = {
+                "name": "test1",
+                "description": "",
+                "refreshInterval": 0,
+                "position": 7,
+                "eTag": "1",
+                "widgets": [
+                    {
+                        "name": "Markdown",
+                        "position": {
+                            "row": 9,
+                            "column": 1
+                        },
+                        "size": {
+                            "rowSpan": 1,
+                            "columnSpan": 2
+                        },
+                        "settings": "#InSprint Regression Test Automation \n\n[![Build Status](https://jenkins-plants.azure.defra.cloud/buildStatus/icon?job=Plants_Quality_Assurance%2FRun-Smoke-Tests-RTL)](https://jenkins-plants.azure.defra.cloud/job/Plants_Quality_Assurance/job/Run-Smoke-Tests-RTL/)",
+                        "settingsVersion": {
+                            "major": 1,
+                            "minor": 0,
+                            "patch": 0
+                        },
+                        "contributionId": "ms.vss-dashboards-web.Microsoft.VisualStudioOnline.Dashboards.MarkdownWidget",
+                        "typeId": "Microsoft.VisualStudioOnline.Dashboards.MarkdownWidget"
+                    },
+                    {
+                        "name": "Embedded Webpage",
+                        "position": {
+                            "row": 10,
+                            "column": 1
+                        },
+                        "size": {
+                            "rowSpan": 10,
+                            "columnSpan": 10
+                        },
+                        "settings": "{\"url\":\"https://sareportingpoc.blob.core.windows.net/wcag-portal/Wave-accessibility-result_latest.html\"}",
+                        "settingsVersion": {
+                            "major": 1,
+                            "minor": 0,
+                            "patch": 0
+                        },
+                        "contributionId": "ms.vss-dashboards-web.Microsoft.VisualStudioOnline.Dashboards.IFrameWidget",
+                        "typeId": "Microsoft.VisualStudioOnline.Dashboards.IFrameWidget"
+                    }
+                    // Other widgets would go here...
+                ]
+            };
+
+            // Authorization header
+            const authHeader = 'Basic U2F0aGlzaC5Qb25udXNhbXlAZGVmcmEub25taWNyb3NvZnQuY29tOk1XUWJsOGp2QlhvVDFPTVEwMjQ5Sk5SYmVBMldDWDdwRGpVaFhvMWxlZmRnS1hvUjFkSjlKUVFKOTlCRUFDQUFBQUFvNGY4V0FBQVNBWkRPMmNSbQ==';
+            
+            // Make the API call
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': authHeader
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                loadingElement.style.display = 'none';
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Dashboard updated successfully!');
+                console.log('API Response:', data); // Optional: Log to console for debugging
+            })
+            .catch(error => {
+                loadingElement.style.display = 'none';
+                alert('Error: ' + error.message);
+                console.error('Error:', error);
+            });
+        });
+    </script>
                 <button type="button" class="btn btn-secondary" onclick="showScreen('projects')">Cancel</button>
                 </div>
             </form>
