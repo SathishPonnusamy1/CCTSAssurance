@@ -426,87 +426,104 @@
                 </div>
                 </div>
                 <div class="form-group">
-                    <label>InSprint Testing:</label>
+                    <label><input type="checkbox" id="insprint-checkbox" onchange="toggleSection('insprint-section')"> InSprint Testing</label>
+                    <div id="insprint-section" class="fancy-frame" style="display:none; margin-top:10px;">
                     <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="project-type" value="internal" checked> ADO
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="project-type" value="external"> JIRA
-                        </label>
-                        <label for="project-link">InSprint Link:</label>
-                    <input type="url" id="project-link" required placeholder="https://example.com">
-                    </div>
+                    <label class="radio-option">
+                    <input type="radio" name="insprint" value="ADO"> ADO Test Plan
+                    </label>
+                    <label class="radio-option">
+                    <input type="radio" name="insprint" value="JIRA"> JIRA
+                    </label>
+                </div>
+                    <label for="insprint-link">InSprint Link:</label>
+                    <input type="url" id="insprint-link" placeholder="https://example.com">
+                </div>
                 </div>
                 <div class="form-group">
-                    <label>Sprint Regression Automated Test Pipeline:</label>
+                    <label><input type="checkbox" id="insprintreg-checkbox" onchange="toggleSection('insprintreg-section')"> InSprint Automated Regression</label>
+                    <div id="insprintreg-section" class="fancy-frame" style="display:none; margin-top:10px;">
                     <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="project-type" value="internal" checked> ADO
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="project-type" value="external"> Jenkins
-                        </label>
-                        <label for="project-link">Sprint Regression Test Pipeline Link:</label>
-                    <input type="url" id="project-link" required placeholder="https://example.com">
-                    </div>
+                    <label class="radio-option">
+                    <input type="radio" name="insprintreg" value="ADO"> Azure DevOps
+                    </label>
+                    <label class="radio-option">
+                    <input type="radio" name="insprintreg" value="JIRA"> Jenkins
+                    </label>
+                </div>
+                    <label for="insprintreg-link">InSprint Automated Regression Test Pipeline Link:</label>
+                    <input type="url" id="insprintreg-link" placeholder="https://example.com">
+                </div>
                 </div>
                 <div class="form-group">
-                    <label>Release/E2E Regression Automated Test Pipeline:</label>
+                    <label><input type="checkbox" id="insprintrelreg-checkbox" onchange="toggleSection('insprintrelreg-section')"> Release/E2E Automated Regression</label>
+                    <div id="insprintrelreg-section" class="fancy-frame" style="display:none; margin-top:10px;">
                     <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="project-type" value="internal" checked> ADO
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="project-type" value="external"> Jenkins
-                        </label>
-                        <label for="project-link">Release/E2E Regression Test Pipeline Link:</label>
-                    <input type="url" id="project-link" required placeholder="https://example.com">
-                    </div>
+                    <label class="radio-option">
+                    <input type="radio" name="insprintreg" value="ADO"> Azure DevOps
+                    </label>
+                    <label class="radio-option">
+                    <input type="radio" name="insprintreg" value="JIRA"> Jenkins
+                    </label>
+                </div>
+                    <label for="insprintrelreg-link">Release/E2E Automated Regression Test Pipeline Link:</label>
+                    <input type="url" id="insprintrelreg-link" placeholder="https://example.com">
+                </div>
                 </div>
                 <div class="form-group">
-                    <label>Compatibility Automated Test Pipeline:</label>
+                    <label><input type="checkbox" id="comp-checkbox" onchange="toggleSection('comp-section')"> Compatibility Automated Tests</label>
+                    <div id="comp-section" class="fancy-frame" style="display:none; margin-top:10px;">
                     <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="project-type" value="internal" checked> ADO
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="project-type" value="external"> Jenkins
-                        </label>
-                        <label for="project-link">Compatibility Test Pipeline Link:</label>
-                    <input type="url" id="project-link" required placeholder="https://example.com">
-                    </div>
+                    <label class="radio-option">
+                    <input type="radio" name="comp" value="ADO"> Azure DevOps
+                    </label>
+                    <label class="radio-option">
+                    <input type="radio" name="comp" value="JIRA"> Jenkins
+                    </label>
+                </div>
+                    <label for="comp-link">Compatibility Automated Test Pipeline Link:</label>
+                    <input type="url" id="comp-link" placeholder="https://example.com">
+                </div>
                 </div>
                 <div class="form-group">
-                    <label>Accessibility Automated Test Pipeline:</label>
+                    <label><input type="checkbox" id="access-checkbox" onchange="toggleSection('access-section')"> Accessibility Automated Tests</label>
+                    <div id="access-section" class="fancy-frame" style="display:none; margin-top:10px;">
                     <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="project-type" value="internal" checked> ADO
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="project-type" value="external"> Jenkins
-                        </label>
-                        <label for="project-link">Accessibility Test Pipeline Link:</label>
-                    <input type="url" id="project-link" required placeholder="https://example.com">
-                    </div>
+                    <label class="radio-option">
+                    <input type="radio" name="access" value="ADO"> Azure DevOps
+                    </label>
+                    <label class="radio-option">
+                    <input type="radio" name="access" value="JIRA"> Jenkins
+                    </label>
+                </div>
+                    <label for="access-link">Accessibility Automated Test Pipeline Link:</label>
+                    <input type="url" id="access-link" placeholder="https://example.com">
+                </div>
                 </div>
                 <div class="form-group">
-                    <label>Performance Automated Test Pipeline:</label>
+                    <label><input type="checkbox" id="perf-checkbox" onchange="toggleSection('perf-section')"> Performance Automated Tests</label>
+                    <div id="perf-section" class="fancy-frame" style="display:none; margin-top:10px;">
                     <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="project-type" value="internal" checked> ADO
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="project-type" value="external"> Jenkins
-                        </label>
-                        <label for="project-link">Performance Test Pipeline Link:</label>
-                    <input type="url" id="project-link" required placeholder="https://example.com">
-                    </div>
+                    <label class="radio-option">
+                    <input type="radio" name="perf" value="ADO"> Azure DevOps
+                    </label>
+                    <label class="radio-option">
+                    <input type="radio" name="perf" value="JIRA"> Jenkins
+                    </label>
+                </div>
+                    <label for="perf-link">Performance Automated Test Pipeline Link:</label>
+                    <input type="url" id="perf-link" placeholder="https://example.com">
+                </div>
                 </div>
                 <div class="form-group">
-                        <label for="project-link">Security Bugs status ADO Link:</label>
-                    <input type="url" id="project-link" required placeholder="https://example.com">
-                    </div>
+                    <label><input type="checkbox" id="sec-checkbox" onchange="toggleSection('sec-section')"> Security Testing</label>
+                    <div id="sec-section" class="fancy-frame" style="display:none; margin-top:10px;">
+                    <label for="sec-link">Security Bugs Stats AzureDevOps Link:</label>
+                    <input type="url" id="sec-link" placeholder="https://example.com">
+                </div>
+                </div>
+                <button type="submit" class="btn">Create Project</button>
+                <button type="button" class="btn btn-secondary" onclick="showScreen('projects')">Cancel</button>
                 </div>
             </form>
         </div>
