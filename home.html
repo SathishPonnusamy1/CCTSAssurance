@@ -1495,7 +1495,8 @@ document.getElementById('fetchImportsSonarIssues').addEventListener('click', fun
         method: 'GET',
         headers: {
             'Authorization': 'Basic U2F0aGlzaFBvbm51c2FteToxM0hhc2h5YTIx',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
         }
     })
     .then(response => {
