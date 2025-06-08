@@ -1470,6 +1470,104 @@
             
             <button class="btn" onclick="showScreen('projects')">Back to Projects</button>
         </div>
+        <!-- Screen 5: Code Coverage Reports -->
+        <div id="coverage-reports" class="screen">
+            <h2>Code Coverage</h2>
+            <p>This page displays code coverage metrics for your projects.</p>
+            <div class="fancy-frame">
+                <h3>Sample Coverage Data</h3>
+                <ul>
+                    <li><strong>DEFRA Plants:</strong> 85% lines covered</li>
+                    <li><strong>Rural Payments:</strong> 72% lines covered</li>
+                    <li><strong>Flood Warning:</strong> 66% lines covered</li>
+                </ul>
+                <p>Integrate with SonarCloud or SonarQube for real-time coverage updates.</p>
+                                <!-- Example HTML for SonarCloud API GET request -->
+                                // ...existing code...
+                                <!-- Example HTML for SonarCloud API GET request -->
+                                <button id="fetchSonarIssues">Fetch SonarCloud Issues</button>
+                                <pre id="sonarResponse"></pre>
+                                <canvas id="sonarPieChart" width="350" height="350" style="display:none; margin-top:20px;"></canvas>
+                                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                <script>
+                                document.getElementById('fetchSonarIssues').addEventListener('click', function() {
+                                    const url = 'https://sonarcloud.io/api/issues/search?componentKeys=Defra.Trade.Cloning.Gateway.Api%2CDefra.Trade.Cloning.Api%2CDefra.Trade.Cloning.Web%2CDefra.Trade.Events.Services.Cloning.Scheduler%2CDefra.Trade.Address.Api%2CDefra.Trade.CrmAdapter%2CDefra.Trade.Events.Services.CaseNotifier%2CDefra.Trade.Events.Services.FileStorePublisher%2CDefra.Trade.Events.Services.FileStoreMover%2CDefra.Trade.CustomerExtension.UI%2CDefra.Trade.CustomerExtension.Api%2CDefra.Trade.Events.Services.CustomerPublisher%2CDefra.Trade.Events.Customer.EventStream%2CDefra.Trade.FileStore%2CDefra.Trade.Application.Status%2CDefra.Trade.Events.Services.TradeStoreUpdater%2CDefra.Trade.Events.CoreServices.InfoPublisher%2CDefra.Trade.Cloning.Adapter.Api';
+                                    fetch(url, {
+                                        method: 'GET',
+                                        headers: {
+                                            'Authorization': 'Bearer 862c349052834f98a05ef0fcce144ff5ed97dab5',
+                                            'Content-Type': 'application/json'
+                                        }
+                                    })
+                                    .then(response => {
+                                        if (!response.ok) throw new Error('HTTP error ' + response.status);
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        document.getElementById('sonarResponse').textContent = JSON.stringify(data, null, 2);
+                                
+                                        // Aggregate code smells by severity
+                                        const severityCount = {};
+                                        if (data.issues) {
+                                            data.issues.forEach(issue => {
+                                                if (issue.type === 'CODE_SMELL') {
+                                                    const sev = issue.severity || 'UNKNOWN';
+                                                    severityCount[sev] = (severityCount[sev] || 0) + 1;
+                                                }
+                                            });
+                                        }
+                                
+                                        // Prepare data for pie chart
+                                        const labels = Object.keys(severityCount);
+                                        const values = Object.values(severityCount);
+                                        const colors = [
+                                            '#e53935', // BLOCKER
+                                            '#fb8c00', // CRITICAL
+                                            '#fbc02d', // MAJOR
+                                            '#43a047', // MINOR
+                                            '#1e88e5', // INFO
+                                            '#888888'  // UNKNOWN
+                                        ];
+                                
+                                        // Show the pie chart
+                                        const ctx = document.getElementById('sonarPieChart').getContext('2d');
+                                        document.getElementById('sonarPieChart').style.display = labels.length ? 'block' : 'none';
+                                
+                                        // Destroy previous chart if exists
+                                        if (window.sonarPieChartInstance) {
+                                            window.sonarPieChartInstance.destroy();
+                                        }
+                                
+                                        window.sonarPieChartInstance = new Chart(ctx, {
+                                            type: 'pie',
+                                            data: {
+                                                labels: labels,
+                                                datasets: [{
+                                                    data: values,
+                                                    backgroundColor: colors.slice(0, labels.length),
+                                                }]
+                                            },
+                                            options: {
+                                                responsive: false,
+                                                plugins: {
+                                                    legend: { position: 'bottom' },
+                                                    title: {
+                                                        display: true,
+                                                        text: 'Code Smells by Severity'
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    })
+                                    .catch(error => {
+                                        document.getElementById('sonarResponse').textContent = 'Error: ' + error.message;
+                                        document.getElementById('sonarPieChart').style.display = 'none';
+                                    });
+                                });
+                                </script>
+            </div>
+        </div>
+        
     </div>
     
     <footer>
