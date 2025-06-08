@@ -1016,6 +1016,12 @@
                     <input type="url" id="sec-link" placeholder="https://example.com">
                 </div>
                 </div>
+                
+                <div class="form-group">
+                    <label for="generated-json">Generated Dashboard JSON:</label>
+                    <textarea id="generated-json" rows="12" style="width: 100%; font-family: monospace; padding: 10px; border-radius: 8px; border: 1px solid #a5d6a7; background-color: #f9fff9;"></textarea>
+                </div>
+
                 <button id="submitBtn" type="submit" class="btn">Create Project</button>
                 <div class="loading" id="loading">Sending request, please wait...</div>    
 <script>
@@ -1547,6 +1553,172 @@ function initializeSampleData() {
         document.addEventListener('DOMContentLoaded', function() {
             initializeSampleData();
         });
+    </script>
+    <script>
+        // Function to generate JSON based on selected QA levers
+        function generateDashboardJSON() {
+            const projectName = document.getElementById('project-name').value || 'test1';
+            const jsonTemplate = {
+                "name": projectName,
+                "description": "",
+                "refreshInterval": 0,
+                "position": 7,
+                "eTag": "1",
+                "widgets": []
+            };
+    
+            // Code Coverage Widget
+            if (document.getElementById('code-coverage-checkbox').checked) {
+                const coverageType = document.querySelector('input[name="code-coverage"]:checked')?.value;
+                const sonarLink = document.getElementById('sonar-link').value;
+                
+                if (coverageType === 'SonarCloud') {
+                    jsonTemplate.widgets.push({
+                        "name": "Markdown",
+                        "position": { "row": 1, "column": 1 },
+                        "size": { "rowSpan": 6, "columnSpan": 10 },
+                        "settings": `# Code Coverage (SonarCloud)\n\n[![SonarCloud Coverage](${sonarLink}/badge.svg)](${sonarLink})`,
+                        "settingsVersion": { "major": 1, "minor": 0, "patch": 0 },
+                        "contributionId": "ms.vss-dashboards-web.Microsoft.VisualStudioOnline.Dashboards.MarkdownWidget",
+                        "typeId": "Microsoft.VisualStudioOnline.Dashboards.MarkdownWidget"
+                    });
+                } else if (coverageType === 'SonarQube') {
+                    jsonTemplate.widgets.push({
+                        "name": "Embedded Webpage",
+                        "position": { "row": 1, "column": 1 },
+                        "size": { "rowSpan": 6, "columnSpan": 10 },
+                        "settings": `{"url":"${sonarLink}"}`,
+                        "settingsVersion": { "major": 1, "minor": 0, "patch": 0 },
+                        "contributionId": "ms.vss-dashboards-web.Microsoft.VisualStudioOnline.Dashboards.IFrameWidget",
+                        "typeId": "Microsoft.VisualStudioOnline.Dashboards.IFrameWidget"
+                    });
+                }
+            }
+    
+            // InSprint Testing Widget
+            if (document.getElementById('insprint-checkbox').checked) {
+                const insprintType = document.querySelector('input[name="insprint"]:checked')?.value;
+                const insprintLink = document.getElementById('insprint-link').value;
+                
+                if (insprintType === 'ADO') {
+                    jsonTemplate.widgets.push({
+                        "name": "Embedded Webpage",
+                        "position": { "row": 7, "column": 1 },
+                        "size": { "rowSpan": 2, "columnSpan": 2 },
+                        "settings": `{"url":"${insprintLink}"}`,
+                        "settingsVersion": { "major": 1, "minor": 0, "patch": 0 },
+                        "contributionId": "ms.vss-dashboards-web.Microsoft.VisualStudioOnline.Dashboards.IFrameWidget",
+                        "typeId": "Microsoft.VisualStudioOnline.Dashboards.IFrameWidget"
+                    });
+                } else if (insprintType === 'JIRA') {
+                    jsonTemplate.widgets.push({
+                        "name": "Markdown",
+                        "position": { "row": 7, "column": 1 },
+                        "size": { "rowSpan": 1, "columnSpan": 2 },
+                        "settings": `# InSprint Testing (JIRA)\n\n[![JIRA Test Status](${insprintLink}/badge.svg)](${insprintLink})`,
+                        "settingsVersion": { "major": 1, "minor": 0, "patch": 0 },
+                        "contributionId": "ms.vss-dashboards-web.Microsoft.VisualStudioOnline.Dashboards.MarkdownWidget",
+                        "typeId": "Microsoft.VisualStudioOnline.Dashboards.MarkdownWidget"
+                    });
+                }
+            }
+    
+            // InSprint Automated Regression Widget
+            if (document.getElementById('insprintreg-checkbox').checked) {
+                const insprintRegLink = document.getElementById('insprintreg-link').value;
+                const insprintRegType = document.querySelector('input[name="insprintreg"]:checked')?.value;
+                
+                jsonTemplate.widgets.push({
+                    "name": "Markdown",
+                    "position": { "row": 9, "column": 1 },
+                    "size": { "rowSpan": 1, "columnSpan": 2 },
+                    "settings": `# InSprint Regression Test Automation \n\n[![Build Status](${insprintRegLink}/badge.svg)](${insprintRegLink})`,
+                    "settingsVersion": { "major": 1, "minor": 0, "patch": 0 },
+                    "contributionId": "ms.vss-dashboards-web.Microsoft.VisualStudioOnline.Dashboards.MarkdownWidget",
+                    "typeId": "Microsoft.VisualStudioOnline.Dashboards.MarkdownWidget"
+                });
+            }
+    
+            // Accessibility Testing Widget
+            if (document.getElementById('access-checkbox').checked) {
+                const accessLink = document.getElementById('access-link').value;
+                const accessType = document.querySelector('input[name="access"]:checked')?.value;
+                
+                jsonTemplate.widgets.push({
+                    "name": "Embedded Webpage",
+                    "position": { "row": 10, "column": 1 },
+                    "size": { "rowSpan": 10, "columnSpan": 10 },
+                    "settings": `{"url":"${accessLink}"}`,
+                    "settingsVersion": { "major": 1, "minor": 0, "patch": 0 },
+                    "contributionId": "ms.vss-dashboards-web.Microsoft.VisualStudioOnline.Dashboards.IFrameWidget",
+                    "typeId": "Microsoft.VisualStudioOnline.Dashboards.IFrameWidget"
+                });
+            }
+    
+            // Performance Testing Widget
+            if (document.getElementById('perf-checkbox').checked) {
+                const perfLink = document.getElementById('perf-link').value;
+                const perfType = document.querySelector('input[name="perf"]:checked')?.value;
+                
+                jsonTemplate.widgets.push({
+                    "name": "Markdown",
+                    "position": { "row": 7, "column": 5 },
+                    "size": { "rowSpan": 1, "columnSpan": 2 },
+                    "settings": `### Performance Testing\n[![Build Status](${perfLink}/badge.svg)](${perfLink})`,
+                    "settingsVersion": { "major": 1, "minor": 0, "patch": 0 },
+                    "contributionId": "ms.vss-dashboards-web.Microsoft.VisualStudioOnline.Dashboards.MarkdownWidget",
+                    "typeId": "Microsoft.VisualStudioOnline.Dashboards.MarkdownWidget"
+                });
+            }
+    
+            // Security Testing Widget
+            if (document.getElementById('sec-checkbox').checked) {
+                const secLink = document.getElementById('sec-link').value;
+                
+                jsonTemplate.widgets.push({
+                    "name": "Embedded Webpage",
+                    "position": { "row": 8, "column": 5 },
+                    "size": { "rowSpan": 2, "columnSpan": 2 },
+                    "settings": `{"url":"${secLink}"}`,
+                    "settingsVersion": { "major": 1, "minor": 0, "patch": 0 },
+                    "contributionId": "ms.vss-dashboards-web.Microsoft.VisualStudioOnline.Dashboards.IFrameWidget",
+                    "typeId": "Microsoft.VisualStudioOnline.Dashboards.IFrameWidget"
+                });
+            }
+    
+            // Compatibility Testing Widget
+            if (document.getElementById('comp-checkbox').checked) {
+                const compLink = document.getElementById('comp-link').value;
+                const compType = document.querySelector('input[name="comp"]:checked')?.value;
+                
+                jsonTemplate.widgets.push({
+                    "name": "Markdown",
+                    "position": { "row": 7, "column": 3 },
+                    "size": { "rowSpan": 1, "columnSpan": 2 },
+                    "settings": `### Compatibility Testing\n[![BrowserStack Status](${compLink}/badge.svg)](${compLink})`,
+                    "settingsVersion": { "major": 1, "minor": 0, "patch": 0 },
+                    "contributionId": "ms.vss-dashboards-web.Microsoft.VisualStudioOnline.Dashboards.MarkdownWidget",
+                    "typeId": "Microsoft.VisualStudioOnline.Dashboards.MarkdownWidget"
+                });
+            }
+    
+            return JSON.stringify(jsonTemplate, null, 2);
+        }
+    
+        // Function to update the JSON preview
+        function updateJSONPreview() {
+            const jsonTextarea = document.getElementById('generated-json');
+            jsonTextarea.value = generateDashboardJSON();
+        }
+    
+        // Add event listeners to all form elements to update JSON preview
+        document.querySelectorAll('#new-project input, #new-project select, #new-project textarea').forEach(element => {
+            element.addEventListener('change', updateJSONPreview);
+            element.addEventListener('input', updateJSONPreview);
+        });
+    
+        // Initial update
+        updateJSONPreview();
     </script>
 </body>
 </html>
