@@ -1482,8 +1482,86 @@
                     <li><strong>Flood Warning:</strong> 66% lines covered</li>
                 </ul>
                 <p>Integrate with SonarCloud or SonarQube for real-time coverage updates.</p>
-                                <!-- Example HTML for SonarCloud API GET request -->
-                                // ...existing code...
+                                <!-- Place this inside your Code Coverage Reports screen or any desired location -->
+<button id="fetchImportsSonarIssues">Fetch Imports SonarQube Issues</button>
+<pre id="importsSonarResponse"></pre>
+<canvas id="importsSonarPieChart" width="350" height="350" style="display:none; margin-top:20px;"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.getElementById('fetchImportsSonarIssues').addEventListener('click', function() {
+    const url = 'https://vss-sonarqube.azure.defra.cloud/api/issues/search?componentKeys=Imports-MS-FrontEndNotification%2CImports-frontend-decision%2CImports-frontend-bordernotification%2CImports-frontend-control%2CImports-frontend-checks%2CImports-frontend-bcpadmin%2CImports-frontend-upload%2CImports-MS-ApprovedEstablishment%2CImports-MS-Bip%2CImports-MS-BorderNotification%2CImports-MS-Bordernotification-Refdata%2CImports-MS-Certificate%2CImports-MS-Checks%2CImports-MS-Cloning%2CImports-MS-commoditycode%2CImports-MS-Countries%2CImports-MS-Customer%2CImports-MS-Decision%2CImports-MS-EconomicOperators%2CImports-MS-FieldConfig%2CImports-MS-File-Compression%2CImports-MS-GVMS%2CImports-MS-File-Upload%2CImports-Proxy%2CImports-MS-Laboratories%2CImports-Notification-Schema%2CImports-MS-Notification%2CImports-MS-Permissions%2CImports-MS-ReferenceDataLoader%2CImports-MS-SoapSearch%2CImports-MS-SoapRequest%2CImports-FUNC-Auto-Clearance%2CImports-FUNC-Risk-Assessment%2CImports-FUNC-Risk-Interface%2CImports-FUNC-Risk-Locking%2CImports-FUNC-Notify%2CImports-FUNC-Archive-Notifications%2CImports-MS-ENotificationEvent%2CImports-MS-ENotificationProcessing%2CImports-MS-ENotificationSubmission%2CImports-MS-ENotificationEventListener%2CImports-MS-BulkUpload%2CImports-MS-InServiceMessaging%2CImports-MS-Legacy-Notification%2CTracesX_Cloning&statuses=OPEN&severities=MAJOR';
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Basic U2F0aGlzaFBvbm51c2FteToxM0hhc2h5YTIx',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('HTTP error ' + response.status);
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('importsSonarResponse').textContent = JSON.stringify(data, null, 2);
+
+        // Aggregate issues by severity
+        const severityCount = {};
+        if (data.issues) {
+            data.issues.forEach(issue => {
+                const sev = issue.severity || 'UNKNOWN';
+                severityCount[sev] = (severityCount[sev] || 0) + 1;
+            });
+        }
+
+        // Prepare data for pie chart
+        const labels = Object.keys(severityCount);
+        const values = Object.values(severityCount);
+        const colors = [
+            '#e53935', // BLOCKER
+            '#fb8c00', // CRITICAL
+            '#fbc02d', // MAJOR
+            '#43a047', // MINOR
+            '#1e88e5', // INFO
+            '#888888'  // UNKNOWN
+        ];
+
+        // Show the pie chart
+        const ctx = document.getElementById('importsSonarPieChart').getContext('2d');
+        document.getElementById('importsSonarPieChart').style.display = labels.length ? 'block' : 'none';
+
+        // Destroy previous chart if exists
+        if (window.importsSonarPieChartInstance) {
+            window.importsSonarPieChartInstance.destroy();
+        }
+
+        window.importsSonarPieChartInstance = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: colors.slice(0, labels.length),
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: {
+                        display: true,
+                        text: 'Imports SonarQube Issues by Severity'
+                    }
+                }
+            }
+        });
+    })
+    .catch(error => {
+        document.getElementById('importsSonarResponse').textContent = 'Error: ' + error.message;
+        document.getElementById('importsSonarPieChart').style.display = 'none';
+    });
+});
+</script>
+                                
                                 <!-- Example HTML for SonarCloud API GET request -->
                                 <button id="fetchSonarIssues">Fetch SonarCloud Issues</button>
                                 <pre id="sonarResponse"></pre>
