@@ -1485,79 +1485,82 @@
 
 
             
-<button id="fetchIPAFFSCodeSmells">Show IPAFFS CodeSmells Piechart</button>
-<pre id="ipaffsCodeSmellsResponse"></pre>
-<canvas id="ipaffsCodeSmellsPieChart" width="350" height="350" style="display:none; margin-top:20px;"></canvas>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-document.getElementById('fetchIPAFFSCodeSmells').addEventListener('click', function() {
-    fetch('APIResponse/SonarQube/IPAFFS/IPAFFSCodeSmellsPortfolio.JSON')
-    .then(response => {
-        if (!response.ok) throw new Error('HTTP error ' + response.status);
-        return response.json();
-    })
-    .then(data => {
-        document.getElementById('ipaffsCodeSmellsResponse').textContent = JSON.stringify(data, null, 2);
-
-        // Aggregate code smells by severity
-        const severityCount = {};
-        if (data.issues) {
-            data.issues.forEach(issue => {
-                if (issue.type === 'CODE_SMELL') {
-                    const sev = issue.severity || 'UNKNOWN';
-                    severityCount[sev] = (severityCount[sev] || 0) + 1;
-                }
-            });
-        }
-
-        // Prepare data for pie chart
-        const labels = Object.keys(severityCount);
-        const values = Object.values(severityCount);
-        const colors = [
-            '#e53935', // BLOCKER
-            '#fb8c00', // CRITICAL
-            '#fbc02d', // MAJOR
-            '#43a047', // MINOR
-            '#1e88e5', // INFO
-            '#888888'  // UNKNOWN
-        ];
-
-        // Show the pie chart
-        const ctx = document.getElementById('ipaffsCodeSmellsPieChart').getContext('2d');
-        document.getElementById('ipaffsCodeSmellsPieChart').style.display = labels.length ? 'block' : 'none';
-
-        // Destroy previous chart if exists
-        if (window.ipaffsCodeSmellsPieChartInstance) {
-            window.ipaffsCodeSmellsPieChartInstance.destroy();
-        }
-
-        window.ipaffsCodeSmellsPieChartInstance = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: values,
-                    backgroundColor: colors.slice(0, labels.length),
-                }]
-            },
-            options: {
-                responsive: false,
-                plugins: {
-                    legend: { position: 'bottom' },
-                    title: {
-                        display: true,
-                        text: 'IPAFFS CodeSmells by Severity'
-                    }
-                }
-            }
-        });
-    })
-    .catch(error => {
-        document.getElementById('ipaffsCodeSmellsResponse').textContent = 'Error: ' + error.message;
-        document.getElementById('ipaffsCodeSmellsPieChart').style.display = 'none';
-    });
-});
-</script>
+                // ...existing code...
+                <button id="fetchIPAFFSCodeSmells">Show IPAFFS CodeSmells Piechart</button>
+                <pre id="ipaffsCodeSmellsResponse" style="display:none;"></pre>
+                <canvas id="ipaffsCodeSmellsPieChart" width="350" height="350" style="display:none; margin-top:20px;"></canvas>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                document.getElementById('fetchIPAFFSCodeSmells').addEventListener('click', function() {
+                    fetch('APIResponse/SonarQube/IPAFFS/IPAFFSCodeSmellsPortfolio.JSON')
+                    .then(response => {
+                        if (!response.ok) throw new Error('HTTP error ' + response.status);
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Hide the JSON response display
+                        document.getElementById('ipaffsCodeSmellsResponse').style.display = 'none';
+                
+                        // Aggregate code smells by severity
+                        const severityCount = {};
+                        if (data.issues) {
+                            data.issues.forEach(issue => {
+                                if (issue.type === 'CODE_SMELL') {
+                                    const sev = issue.severity || 'UNKNOWN';
+                                    severityCount[sev] = (severityCount[sev] || 0) + 1;
+                                }
+                            });
+                        }
+                
+                        // Prepare data for pie chart
+                        const labels = Object.keys(severityCount);
+                        const values = Object.values(severityCount);
+                        const colors = [
+                            '#e53935', // BLOCKER
+                            '#fb8c00', // CRITICAL
+                            '#fbc02d', // MAJOR
+                            '#43a047', // MINOR
+                            '#1e88e5', // INFO
+                            '#888888'  // UNKNOWN
+                        ];
+                
+                        // Show the pie chart
+                        const ctx = document.getElementById('ipaffsCodeSmellsPieChart').getContext('2d');
+                        document.getElementById('ipaffsCodeSmellsPieChart').style.display = labels.length ? 'block' : 'none';
+                
+                        // Destroy previous chart if exists
+                        if (window.ipaffsCodeSmellsPieChartInstance) {
+                            window.ipaffsCodeSmellsPieChartInstance.destroy();
+                        }
+                
+                        window.ipaffsCodeSmellsPieChartInstance = new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    data: values,
+                                    backgroundColor: colors.slice(0, labels.length),
+                                }]
+                            },
+                            options: {
+                                responsive: false,
+                                plugins: {
+                                    legend: { position: 'bottom' },
+                                    title: {
+                                        display: true,
+                                        text: 'IPAFFS CodeSmells by Severity'
+                                    }
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        document.getElementById('ipaffsCodeSmellsResponse').style.display = 'block';
+                        document.getElementById('ipaffsCodeSmellsResponse').textContent = 'Error: ' + error.message;
+                        document.getElementById('ipaffsCodeSmellsPieChart').style.display = 'none';
+                    });
+                });
+                </script>
 
 
                                 <!-- Place this inside your Code Coverage Reports screen or any desired location -->
