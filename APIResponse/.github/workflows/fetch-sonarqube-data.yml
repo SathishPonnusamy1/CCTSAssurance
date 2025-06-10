@@ -1,0 +1,29 @@
+name: Fetch SonarQube Data
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+  workflow_dispatch:      # Allows manual triggering
+
+jobs:
+  fetch-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Fetch SonarQube data
+      run: |
+        mkdir -p data
+        curl --location 'https://vss-sonarqube.azure.defra.cloud/api/issues/search?componentKeys=Imports-MS-FrontEndNotification&types=CODE_SMELL&branch=master&statuses=OPEN&severities=MAJOR%2CCRITICAL%2CBLOCKER%2CMINOR' \
+        -H "Authorization: Bearer ${{ secrets.SONARQUBE_TOKEN }}" \
+        > data/sonarqube-issues.json
+        
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add data/sonarqube-issues.json
+        git diff --quiet && git diff --staged --quiet || git commit -m "Update SonarQube issues [skip ci]"
+        git push

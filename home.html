@@ -1561,7 +1561,25 @@
                     });
                 });
                 </script>
- 
+
+<button id="saveToGithubBtn">Save CodeSmells JSON to GitHub</button>
+<script>
+document.getElementById('saveToGithubBtn').addEventListener('click', function() {
+    fetch('http://localhost:3000/api/save-to-github', {
+        method: 'POST'
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert('File saved to GitHub!');
+        } else {
+            alert('Failed: ' + data.error);
+        }
+    })
+    .catch(err => alert('Error: ' + err));
+});
+</script>
+
             </div>
         </div>
         

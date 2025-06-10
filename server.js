@@ -1,18 +1,59 @@
-// ...existing code...
-const express = require('express');
-const app = express();
+import express from 'express';
+import fetch from 'node-fetch';
+import { Buffer } from 'buffer';
 
-app.get('/api/sonarqube', async (req, res) => {
-    const fetch = (await import('node-fetch')).default;
-    const url = 'https://vss-sonarqube.azure.defra.cloud/api/issues/search?componentKeys=Imports-MS-FrontEndNotification%2CImports-frontend-decision%2CImports-frontend-bordernotification%2CImports-frontend-control%2CImports-frontend-checks%2CImports-frontend-bcpadmin%2CImports-frontend-upload%2CImports-MS-ApprovedEstablishment%2CImports-MS-Bip%2CImports-MS-BorderNotification%2CImports-MS-Bordernotification-Refdata%2CImports-MS-Certificate%2CImports-MS-Checks%2CImports-MS-Cloning%2CImports-MS-commoditycode%2CImports-MS-Countries%2CImports-MS-Customer%2CImports-MS-Decision%2CImports-MS-EconomicOperators%2CImports-MS-FieldConfig%2CImports-MS-File-Compression%2CImports-MS-GVMS%2CImports-MS-File-Upload%2CImports-Proxy%2CImports-MS-Laboratories%2CImports-Notification-Schema%2CImports-MS-Notification%2CImports-MS-Permissions%2CImports-MS-ReferenceDataLoader%2CImports-MS-SoapSearch%2CImports-MS-SoapRequest%2CImports-FUNC-Auto-Clearance%2CImports-FUNC-Risk-Assessment%2CImports-FUNC-Risk-Interface%2CImports-FUNC-Risk-Locking%2CImports-FUNC-Notify%2CImports-FUNC-Archive-Notifications%2CImports-MS-ENotificationEvent%2CImports-MS-ENotificationProcessing%2CImports-MS-ENotificationSubmission%2CImports-MS-ENotificationEventListener%2CImports-MS-BulkUpload%2CImports-MS-InServiceMessaging%2CImports-MS-Legacy-Notification%2CTracesX_Cloning&statuses=OPEN&severities=MAJOR';
-    const response = await fetch(url, {
-        headers: {
-            'Authorization': 'Basic U2F0aGlzaFBvbm51c2FteToxM0hhc2h5YTIx',
-            'Content-Type': 'application/json'
+const app = express();
+app.use(express.json());
+
+const GITHUB_TOKEN = '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'; // Replace with your token
+const REPO_OWNER = 'SathishPonnusamy1';
+const REPO_NAME = 'CCTSAssurance';
+const FILE_PATH = 'IPAFFS_CodeSmellsAPIResponse.JSON';
+const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
+
+app.post('/api/save-to-github', async (req, res) => {
+    try {
+        // Fetch the JSON from your API or use req.body.data if sent from frontend
+        const response = await fetch('YOUR_API_URL'); // Replace with your API endpoint
+        const jsonData = await response.json();
+
+        // Get SHA if file exists
+        let sha = undefined;
+        const getRes = await fetch(API_URL, {
+            headers: { Authorization: `token ${GITHUB_TOKEN}` }
+        });
+        if (getRes.status === 200) {
+            const getData = await getRes.json();
+            sha = getData.sha;
         }
-    });
-    const data = await response.json();
-    res.json(data);
+
+        // Prepare payload
+        const content = Buffer.from(JSON.stringify(jsonData, null, 2)).toString('base64');
+        const payload = {
+            message: 'Update IPAFFS CodeSmells API Response',
+            content,
+            ...(sha && { sha })
+        };
+
+        // Save to GitHub
+        const putRes = await fetch(API_URL, {
+            method: 'PUT',
+            headers: {
+                Authorization: `token ${GITHUB_TOKEN}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (putRes.ok) {
+            res.json({ success: true, message: 'File saved to GitHub successfully!' });
+        } else {
+            const error = await putRes.text();
+            res.status(500).json({ success: false, error });
+        }
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
 });
 
-app.listen(3000, () => console.log('Proxy running on http://localhost:3000'));
+app.listen(3000, () => console.log('Server running on http://localhost:3000'));
