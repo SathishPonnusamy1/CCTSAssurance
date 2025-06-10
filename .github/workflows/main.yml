@@ -1,0 +1,52 @@
+name: CI/CD Pipeline with SonarQube Data Fetch
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Daily at midnight UTC
+  workflow_dispatch:     # Manual trigger
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # Your existing jobs (build, test, etc.)
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # Add your build steps here
+      - name: Build
+        run: echo "Building the application..."
+  
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      # Add your test steps here
+      - name: Test
+        run: echo "Running tests..."
+  
+  # SonarQube data fetch job
+  fetch-sonarqube-data:
+    runs-on: ubuntu-latest
+    # Can run in parallel with other jobs or after them
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Fetch SonarQube data
+        run: |
+          mkdir -p data
+          curl --location 'https://vss-sonarqube.azure.defra.cloud/api/issues/search?componentKeys=Imports-MS-FrontEndNotification&types=CODE_SMELL&branch=master&statuses=OPEN&severities=MAJOR%2CCRITICAL%2CBLOCKER%2CMINOR' \
+          -H "Authorization: Bearer ${{ secrets.SONARQUBE_TOKEN }}" \
+          > data/sonarqube-issues.json
+          
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add data/sonarqube-issues.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update SonarQube issues [skip ci]"
+          git push
