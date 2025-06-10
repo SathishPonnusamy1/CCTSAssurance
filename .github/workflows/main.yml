@@ -34,6 +34,12 @@ jobs:
     timeout-minutes: 10  # Increase timeout
     steps:
       - uses: actions/checkout@v3
+
+      - name: Debug network
+        run: |
+          nslookup vss-sonarqube.azure.defra.cloud
+          traceroute vss-sonarqube.azure.defra.cloud
+          curl -v https://vss-sonarqube.azure.defra.cloud
       
       - name: Verify connectivity
         run: |
