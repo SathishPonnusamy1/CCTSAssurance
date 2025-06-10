@@ -31,19 +31,39 @@ jobs:
   # SonarQube data fetch job
   fetch-sonarqube-data:
     runs-on: ubuntu-latest
-    # Can run in parallel with other jobs or after them
+    timeout-minutes: 10  # Increase timeout
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        
-      - name: Fetch SonarQube data
+      - uses: actions/checkout@v3
+      
+      - name: Verify connectivity
+        run: |
+          ping -c 3 vss-sonarqube.azure.defra.cloud || true
+          curl -v --connect-timeout 30 --max-time 60 \
+            https://vss-sonarqube.azure.defra.cloud/api/server/version || true
+          
+      - name: Fetch SonarQube data (with retries)
         run: |
           mkdir -p data
-          curl --location 'https://vss-sonarqube.azure.defra.cloud/api/issues/search?componentKeys=Imports-MS-FrontEndNotification&types=CODE_SMELL&branch=master&statuses=OPEN&severities=MAJOR%2CCRITICAL%2CBLOCKER%2CMINOR' \
-          -H "Authorization: Bearer ${{ secrets.SONARQUBE_TOKEN }}" \
-          > data/sonarqube-issues.json
+          for i in {1..3}; do
+            if curl --location --connect-timeout 30 --max-time 120 \
+              'https://vss-sonarqube.azure.defra.cloud/api/issues/search?componentKeys=Imports-MS-FrontEndNotification&types=CODE_SMELL&branch=master&statuses=OPEN&severities=MAJOR%2CCRITICAL%2CBLOCKER%2CMINOR' \
+              -H "Authorization: Bearer ${{ secrets.SONARQUBE_TOKEN }}" \
+              --output data/sonarqube-issues.json; then
+              break
+            fi
+            sleep $((i*10))
+          done
+          
+      - name: Verify JSON file
+        run: |
+          if [ ! -s data/sonarqube-issues.json ]; then
+            echo "Failed to fetch SonarQube data"
+            exit 1
+          fi
+          jq empty data/sonarqube-issues.json  # Verify valid JSON
           
       - name: Commit and push changes
+        if: success()
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
