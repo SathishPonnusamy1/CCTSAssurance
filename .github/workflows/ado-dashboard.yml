@@ -7,10 +7,15 @@ on:
 
 jobs:
   create-dashboard:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # Changed to use self-hosted runner
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
 
       - name: Create ADO Dashboard
         run: |
