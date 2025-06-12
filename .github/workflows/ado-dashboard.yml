@@ -1,0 +1,27 @@
+name: Create Azure DevOps Dashboard
+
+on:
+  workflow_dispatch:  # Allows manual triggering
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+
+jobs:
+  create-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create ADO Dashboard
+        run: |
+          # URL encode the organization/project path
+          PROJECT_PATH="CCTS%20Quality%20Assurance%20and%20Test"
+          
+          # Make the API call
+          curl --location "https://dev.azure.com/defragovuk/${PROJECT_PATH}/_apis/dashboard/dashboards?api-version=7.1-preview.3" \
+          --header 'Content-Type: application/json' \
+          --header "Authorization: Basic ${{ secrets.ADO_PAT }}" \
+          --data @ADODashboard_RequestJSONBody.json
+
+        env:
+          ADO_PAT: ${{ secrets.ADO_PAT }}

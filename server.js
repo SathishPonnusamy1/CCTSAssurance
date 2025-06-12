@@ -1,6 +1,5 @@
-import express from 'express';
-import fetch from 'node-fetch';
-import { Buffer } from 'buffer';
+const express = require('express');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 const app = express();
 app.use(express.json());
