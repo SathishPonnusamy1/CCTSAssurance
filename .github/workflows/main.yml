@@ -11,7 +11,8 @@ on:
 
 env:
   HTTPS_PROXY: ${{ secrets.HTTPS_PROXY }}
-  NO_PROXY: "localhost,127.0.0.1,vss-sonarqube.azure.defra.cloud"
+  HTTP_PROXY: ${{ secrets.HTTP_PROXY }}
+  no_proxy: "localhost,127.0.0.1,vss-sonarqube.azure.defra.cloud"
 
 jobs:
   # Your existing jobs (build, test, etc.)
@@ -44,56 +45,91 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y traceroute iputils-ping curl netcat-openbsd
 
-      - name: Debug network
+      - name: Test direct connection
+        continue-on-error: true
         run: |
-          echo "Testing DNS resolution..."
-          nslookup vss-sonarqube.azure.defra.cloud
-          
-          echo "Testing port connectivity..."
-          nc -zv -w 5 vss-sonarqube.azure.defra.cloud 443 || echo "Port 443 not reachable"
-          
-          echo "Testing route..."
-          sudo traceroute vss-sonarqube.azure.defra.cloud
-          
-          echo "Testing HTTPS connectivity..."
-          curl -v --max-time 30 \
+          echo "Testing direct connection..."
+          curl -v --max-time 10 \
+            -k \
+            --connect-timeout 5 \
+            https://vss-sonarqube.azure.defra.cloud/api/server/version || echo "Direct connection failed"
+
+      - name: Test proxy connection
+        if: env.HTTPS_PROXY != ''
+        continue-on-error: true
+        run: |
+          echo "Testing proxy connection..."
+          curl -v --max-time 10 \
+            -k \
+            --connect-timeout 5 \
             -x "${{ secrets.HTTPS_PROXY }}" \
-            --connect-timeout 10 \
-            https://vss-sonarqube.azure.defra.cloud || echo "HTTPS connection failed"
-      
-      - name: Fetch SonarQube data (with retries)
+            https://vss-sonarqube.azure.defra.cloud/api/server/version || echo "Proxy connection failed"
+
+      - name: Test alternative proxy connection
+        if: env.HTTP_PROXY != ''
+        continue-on-error: true
+        run: |
+          echo "Testing alternative proxy..."
+          curl -v --max-time 10 \
+            -k \
+            --connect-timeout 5 \
+            -x "${{ secrets.HTTP_PROXY }}" \
+            https://vss-sonarqube.azure.defra.cloud/api/server/version || echo "Alternative proxy connection failed"
+
+      - name: Fetch SonarQube data
         run: |
           mkdir -p data
           MAX_RETRIES=3
           RETRY_DELAY=10
-          
+          SUCCESS=false
+
           for i in $(seq 1 $MAX_RETRIES); do
             echo "Attempt $i of $MAX_RETRIES"
             
+            # Try with default settings first
             if curl --location \
               --connect-timeout 30 \
-              --max-time 120 \
-              -x "${{ secrets.HTTPS_PROXY }}" \
+              --max-time 60 \
+              -k \
               -H "Authorization: Bearer ${{ secrets.SONARQUBE_TOKEN }}" \
               --output data/sonarqube-issues.json \
               --silent --show-error --fail \
               'https://vss-sonarqube.azure.defra.cloud/api/issues/search?componentKeys=Imports-MS-FrontEndNotification&types=CODE_SMELL&branch=master&statuses=OPEN&severities=MAJOR%2CCRITICAL%2CBLOCKER%2CMINOR'; then
-              echo "Successfully fetched SonarQube data"
+              SUCCESS=true
               break
-            else
-              echo "Attempt $i failed"
-              if [ $i -lt $MAX_RETRIES ]; then
-                echo "Waiting ${RETRY_DELAY}s before next attempt..."
-                sleep $RETRY_DELAY
-                RETRY_DELAY=$((RETRY_DELAY * 2))
-              else
-                echo "All attempts failed"
-                exit 1
+            fi
+            
+            # If default failed and proxy is configured, try with proxy
+            if [ ! -z "${{ secrets.HTTPS_PROXY }}" ]; then
+              if curl --location \
+                --connect-timeout 30 \
+                --max-time 60 \
+                -k \
+                -x "${{ secrets.HTTPS_PROXY }}" \
+                -H "Authorization: Bearer ${{ secrets.SONARQUBE_TOKEN }}" \
+                --output data/sonarqube-issues.json \
+                --silent --show-error --fail \
+                'https://vss-sonarqube.azure.defra.cloud/api/issues/search?componentKeys=Imports-MS-FrontEndNotification&types=CODE_SMELL&branch=master&statuses=OPEN&severities=MAJOR%2CCRITICAL%2CBLOCKER%2CMINOR'; then
+                SUCCESS=true
+                break
               fi
+            fi
+            
+            echo "Attempt $i failed"
+            if [ $i -lt $MAX_RETRIES ]; then
+              echo "Waiting ${RETRY_DELAY}s before next attempt..."
+              sleep $RETRY_DELAY
+              RETRY_DELAY=$((RETRY_DELAY * 2))
             fi
           done
           
-      - name: Verify JSON file
+          if [ "$SUCCESS" = false ]; then
+            echo "All connection attempts failed"
+            exit 1
+          fi
+          
+      - name: Verify data
+        if: success()
         run: |
           if [ ! -s data/sonarqube-issues.json ]; then
             echo "Failed to fetch SonarQube data - empty file"
