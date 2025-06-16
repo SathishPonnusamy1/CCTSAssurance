@@ -35,10 +35,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install network tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y traceroute iputils-ping curl
+
       - name: Debug network
         run: |
           nslookup vss-sonarqube.azure.defra.cloud
-          traceroute vss-sonarqube.azure.defra.cloud
+          sudo traceroute vss-sonarqube.azure.defra.cloud
           curl -v https://vss-sonarqube.azure.defra.cloud
       
       - name: Verify connectivity
