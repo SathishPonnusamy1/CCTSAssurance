@@ -15,7 +15,7 @@ jobs:
       - name: Install dependencies and network tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl traceroute inetutils-traceroute
+          sudo apt-get install -y curl traceroute
 
       - name: Create ADO Dashboard
         run: |
