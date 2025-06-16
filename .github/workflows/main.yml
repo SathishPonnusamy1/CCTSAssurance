@@ -52,6 +52,7 @@ jobs:
           curl -v --max-time 10 \
             -k \
             --connect-timeout 5 \
+            -u "${{ secrets.SONAR_USERNAME }}:${{ secrets.SONAR_PASSWORD }}" \
             https://vss-sonarqube.azure.defra.cloud/api/server/version || echo "Direct connection failed"
 
       - name: Test proxy connection
@@ -62,6 +63,7 @@ jobs:
           curl -v --max-time 10 \
             -k \
             --connect-timeout 5 \
+            -u "${{ secrets.SONAR_USERNAME }}:${{ secrets.SONAR_PASSWORD }}" \
             -x "${{ secrets.HTTPS_PROXY }}" \
             https://vss-sonarqube.azure.defra.cloud/api/server/version || echo "Proxy connection failed"
 
@@ -73,6 +75,7 @@ jobs:
           curl -v --max-time 10 \
             -k \
             --connect-timeout 5 \
+            -u "${{ secrets.SONAR_USERNAME }}:${{ secrets.SONAR_PASSWORD }}" \
             -x "${{ secrets.HTTP_PROXY }}" \
             https://vss-sonarqube.azure.defra.cloud/api/server/version || echo "Alternative proxy connection failed"
 
@@ -91,7 +94,7 @@ jobs:
               --connect-timeout 30 \
               --max-time 60 \
               -k \
-              -H "Authorization: Bearer ${{ secrets.SONARQUBE_TOKEN }}" \
+              -u "${{ secrets.SONAR_USERNAME }}:${{ secrets.SONAR_PASSWORD }}" \
               --output data/sonarqube-issues.json \
               --silent --show-error --fail \
               'https://vss-sonarqube.azure.defra.cloud/api/issues/search?componentKeys=Imports-MS-FrontEndNotification&types=CODE_SMELL&branch=master&statuses=OPEN&severities=MAJOR%2CCRITICAL%2CBLOCKER%2CMINOR'; then
@@ -105,8 +108,8 @@ jobs:
                 --connect-timeout 30 \
                 --max-time 60 \
                 -k \
+                -u "${{ secrets.SONAR_USERNAME }}:${{ secrets.SONAR_PASSWORD }}" \
                 -x "${{ secrets.HTTPS_PROXY }}" \
-                -H "Authorization: Bearer ${{ secrets.SONARQUBE_TOKEN }}" \
                 --output data/sonarqube-issues.json \
                 --silent --show-error --fail \
                 'https://vss-sonarqube.azure.defra.cloud/api/issues/search?componentKeys=Imports-MS-FrontEndNotification&types=CODE_SMELL&branch=master&statuses=OPEN&severities=MAJOR%2CCRITICAL%2CBLOCKER%2CMINOR'; then
