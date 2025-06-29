@@ -1,13 +1,13 @@
 {
-    "total": 566,
+    "total": 565,
     "p": 1,
     "ps": 100,
     "paging": {
         "pageIndex": 1,
         "pageSize": 100,
-        "total": 566
+        "total": 565
     },
-    "effortTotal": 5935,
+    "effortTotal": 5925,
     "issues": [
         {
             "key": "AZc1fjCOEb4Ky2gy8wP5",
@@ -132,38 +132,6 @@
             ],
             "creationDate": "2025-06-03T12:05:38+0100",
             "updateDate": "2025-06-03T12:05:38+0100",
-            "type": "CODE_SMELL",
-            "scope": "TEST",
-            "quickFixAvailable": false,
-            "messageFormattings": []
-        },
-        {
-            "key": "AZX3aziZ40G38vPEsCbX",
-            "rule": "javascript:S2699",
-            "severity": "BLOCKER",
-            "component": "Imports-MS-FrontEndNotification:service/test/handlers/importer/consignment_purpose_test.js",
-            "project": "Imports-MS-FrontEndNotification",
-            "line": 390,
-            "hash": "6cf94b1a1264a005c5e3a32ab7e4e258",
-            "textRange": {
-                "startLine": 390,
-                "endLine": 390,
-                "startOffset": 4,
-                "endOffset": 6
-            },
-            "flows": [],
-            "status": "OPEN",
-            "message": "Add at least one assertion to this test case.",
-            "effort": "10min",
-            "debt": "10min",
-            "author": "hassan.khan@defra.onmicrosoft.com",
-            "tags": [
-                "chai",
-                "mocha",
-                "tests"
-            ],
-            "creationDate": "2025-04-02T17:47:18+0100",
-            "updateDate": "2025-04-02T17:47:18+0100",
             "type": "CODE_SMELL",
             "scope": "TEST",
             "quickFixAvailable": false,
@@ -1698,11 +1666,11 @@
             "severity": "BLOCKER",
             "component": "Imports-MS-FrontEndNotification:service/test/handlers/importer/consignment_purpose_test.js",
             "project": "Imports-MS-FrontEndNotification",
-            "line": 689,
+            "line": 673,
             "hash": "b153c225892811170c2bf3653dce14ef",
             "textRange": {
-                "startLine": 689,
-                "endLine": 689,
+                "startLine": 673,
+                "endLine": 673,
                 "startOffset": 4,
                 "endOffset": 6
             },
@@ -1730,11 +1698,11 @@
             "severity": "BLOCKER",
             "component": "Imports-MS-FrontEndNotification:service/test/handlers/importer/consignment_purpose_test.js",
             "project": "Imports-MS-FrontEndNotification",
-            "line": 701,
+            "line": 685,
             "hash": "87e7f80850e923199a9fed9ca1835de7",
             "textRange": {
-                "startLine": 701,
-                "endLine": 701,
+                "startLine": 685,
+                "endLine": 685,
                 "startOffset": 4,
                 "endOffset": 6
             },
@@ -1762,11 +1730,11 @@
             "severity": "BLOCKER",
             "component": "Imports-MS-FrontEndNotification:service/test/handlers/importer/consignment_purpose_test.js",
             "project": "Imports-MS-FrontEndNotification",
-            "line": 713,
+            "line": 697,
             "hash": "fd7b1594bb6585e20c34f97d4653bf22",
             "textRange": {
-                "startLine": 713,
-                "endLine": 713,
+                "startLine": 697,
+                "endLine": 697,
                 "startOffset": 4,
                 "endOffset": 6
             },
@@ -1824,11 +1792,11 @@
             "severity": "BLOCKER",
             "component": "Imports-MS-FrontEndNotification:service/test/handlers/importer/consignment_purpose_test.js",
             "project": "Imports-MS-FrontEndNotification",
-            "line": 641,
+            "line": 625,
             "hash": "3a5b2ade25f73a9d420df2c0e471e7d4",
             "textRange": {
-                "startLine": 641,
-                "endLine": 641,
+                "startLine": 625,
+                "endLine": 625,
                 "startOffset": 4,
                 "endOffset": 6
             },
@@ -1856,11 +1824,11 @@
             "severity": "BLOCKER",
             "component": "Imports-MS-FrontEndNotification:service/test/handlers/importer/consignment_purpose_test.js",
             "project": "Imports-MS-FrontEndNotification",
-            "line": 653,
+            "line": 637,
             "hash": "8a1f440e9accc089d8968befead8129a",
             "textRange": {
-                "startLine": 653,
-                "endLine": 653,
+                "startLine": 637,
+                "endLine": 637,
                 "startOffset": 4,
                 "endOffset": 6
             },
@@ -1888,11 +1856,11 @@
             "severity": "BLOCKER",
             "component": "Imports-MS-FrontEndNotification:service/test/handlers/importer/consignment_purpose_test.js",
             "project": "Imports-MS-FrontEndNotification",
-            "line": 665,
+            "line": 649,
             "hash": "d637f6c5f92a678e21dd9b5ab9fd4b83",
             "textRange": {
-                "startLine": 665,
-                "endLine": 665,
+                "startLine": 649,
+                "endLine": 649,
                 "startOffset": 4,
                 "endOffset": 6
             },
@@ -1920,11 +1888,11 @@
             "severity": "BLOCKER",
             "component": "Imports-MS-FrontEndNotification:service/test/handlers/importer/consignment_purpose_test.js",
             "project": "Imports-MS-FrontEndNotification",
-            "line": 677,
+            "line": 661,
             "hash": "c153e2330c506fc60e2cd168a3d1fe11",
             "textRange": {
-                "startLine": 677,
-                "endLine": 677,
+                "startLine": 661,
+                "endLine": 661,
                 "startOffset": 4,
                 "endOffset": 6
             },
@@ -5237,6 +5205,38 @@
             "textRange": {
                 "startLine": 496,
                 "endLine": 496,
+                "startOffset": 4,
+                "endOffset": 6
+            },
+            "flows": [],
+            "status": "OPEN",
+            "message": "Add at least one assertion to this test case.",
+            "effort": "10min",
+            "debt": "10min",
+            "author": "qaiser.hussain@defra.onmicrosoft.com",
+            "tags": [
+                "chai",
+                "mocha",
+                "tests"
+            ],
+            "creationDate": "2023-11-30T15:11:16+0000",
+            "updateDate": "2023-11-30T15:11:16+0000",
+            "type": "CODE_SMELL",
+            "scope": "TEST",
+            "quickFixAvailable": false,
+            "messageFormattings": []
+        },
+        {
+            "key": "AYwgzKEpiKVzlR7DQYVc",
+            "rule": "javascript:S2699",
+            "severity": "BLOCKER",
+            "component": "Imports-MS-FrontEndNotification:service/test/handlers/importer/select_risk_category_test.js",
+            "project": "Imports-MS-FrontEndNotification",
+            "line": 531,
+            "hash": "ad61b5012602c18779ac062127ac89ee",
+            "textRange": {
+                "startLine": 531,
+                "endLine": 531,
                 "startOffset": 4,
                 "endOffset": 6
             },
